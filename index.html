@@ -10,6 +10,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&display=swap" rel="stylesheet">
 </head>
   <title>料金シミュレーション</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="style.css">
   <style>
     
     :root {
@@ -174,6 +176,7 @@
       background-color: #fff;
       outline: none;
       -webkit-appearance: none;
+      appearance: none; /* ★これをすぐ下に書き足す */
     }
 
     input[type="number"]::-webkit-outer-spin-button,
@@ -184,6 +187,7 @@
 
     input[type="number"] {
       -moz-appearance: textfield;
+      appearance: none; /* ★これをすぐ下に書き足す */
     }
 
     .section select,
@@ -688,6 +692,7 @@
 .veil-outer-title {
   background: transparent !important;
   color: #1e293b !important; 
+  margin-bottom: 5px; /* 数字を小さくするほど隙間が狭くなります（お好みで調整してください） */
   
   /* 📐 【ここを変更！】1.25rem から 1.6rem（または 1.8rem など）に増やすとさらに大きくなります */
   font-size: 1.6rem !important; 
@@ -699,20 +704,72 @@
   width: 100% !important;
   margin: 20px 0 15px 0 !important; 
 }
+#page-compare {
+  margin-top: 0;
+  display: block; /* ※切り替え用。一瞬デザイン調整で確認したい時は display: block; にしておくと便利です */
+}
+/* 画面全体を覆う真っ白な壁 */
+#loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ffffff; /* 画像の背景色に合わせると綺麗です */
+  z-index: 99999;
+  transition: opacity 0.4s ease; /* 消える時のフェードアウトだけ残す */
+  
+  /* 画像自体を全画面にするので、flex関連の配置指定は不要になります */
+}
+
+/* 画像を画面いっぱいに表示する設定 */
+.loader-logo {
+  width: 100vw;   /* 画面の横幅いっぱいに */
+  height: 100vh;  /* 画面の縦幅いっぱいに */
+  
+  /* ↓ここが一番のポイント！ */
+  /* cover：画像を切り抜いてでも、画面全体に隙間なく引き伸ばす（スマホの壁紙みたいなイメージ） */
+  /* contain：画像全体が画面に収まるように、比率を保ったまま最大化する */
+  object-fit: contain; 
+  
+  /* アニメーション（animation: pulse...）の行は削除します */
+}
+
+.loader-text {
+  font-family: sans-serif;
+  color: #666;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+}
+
+@keyframes pulse {
+  0% { transform: scale(0.9); opacity: 0.4; }
+  50% { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(0.9); opacity: 0.4; }
+}
+
   </style>
 </head>
 
   <body>
     <!-- 📱 完全に整理された、あなた専用の固定ヘッダー（背景色はお好みで！） -->
+     <!-- 1. ローディング画面（演出用） -->
+<div id="loader">
+  <!-- ここにロゴ画像を入れると一気にLINE/Xっぽくなります -->
+  <img src="Veil.png" alt="アプリのロゴ" class="loader-logo">
+</div>
+
+<!-- 2. メインコンテンツ（あなたの作ったページ） -->
+<div id="main-content">
+  <!-- ここに既存のコードが入る -->
+</div>
   <div class="veil-app-header">
   <span class="veil-brand-text">Veil</span>
 </div>
 
-<!-- 💡 タイトルをヘッダーの枠外に移動 -->
-<h1 class="veil-outer-title">料金シミュレーション</h1>
-
   <!-- 📱 メインコンテンツ（スマホサイズを確実にキープするコンテナ） -->
   <div id="page-simulator" class="app-page">
+    <h1 class="veil-outer-title">月額料金シミュレーション</h1>
     <div class="container">
 
       <div class="card">
@@ -1015,6 +1072,13 @@
 </button>
 </div> 
 </div>
+<h1 class="veil-outer-title">キャリア別月額料金</h1>
+<div id="page-simulator">
+  <!-- シミュレーターの中身 -->
+</div> <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
+
+<!-- その下に、完全に独立させて iframe を置く -->
+<iframe id="page-compare" src="compare.html" style="width: 100%; height: 80vh; border: none; display: none;"></iframe>
 
      <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
@@ -1035,6 +1099,29 @@
 
   <script>
     // =======================================================================================================================
+// ページを開いた瞬間の時間を記録
+const startTime = Date.now();
+
+window.addEventListener('load', () => {
+  const loader = document.getElementById('loader');
+  
+  const elapsedTime = Date.now() - startTime;
+  const minDisplayTime = 2400; // ★ここで演出時間を調整（1000 = 1秒）
+
+  // 1秒に満たない残りの時間を計算（終わっていれば0）
+  const remainingTime = Math.max(minDisplayTime - elapsedTime, 0);
+
+  // 計算した時間だけ待ってからフェードアウトを開始
+  setTimeout(() => {
+    loader.style.opacity = '0'; // 薄くしていく
+    
+    // CSSのtransition（0.4秒）が終わった頃に完全に非表示（クリックできるように）にする
+    setTimeout(() => {
+      loader.style.display = 'none';
+    }, 400);
+  }, remainingTime);
+});
+
     let globalSalePrice = 0;
 
     // 本体代金や残価の入力、購入方法の変更時に即座に計算を回す
@@ -2124,22 +2211,22 @@ function updateSeriesSelect() {
     }
 
     function switchTab(tabName) {
-      const tabs = document.querySelectorAll('.footer-tab');
-      tabs.forEach(tab => tab.classList.remove('active'));
+  const tabs = document.querySelectorAll('.footer-tab');
+  tabs.forEach(tab => tab.classList.remove('active'));
 
-      const pageSimulator = document.getElementById('page-simulator');
-      const pageCompare = document.getElementById('page-compare');
+  const pageSimulator = document.getElementById('page-simulator');
+  const pageCompare = document.getElementById('page-compare');
 
-      if (tabName === 'simulator') {
-        if (tabs[0]) tabs[0].classList.add('active'); 
-        if (pageSimulator) pageSimulator.style.display = 'block';
-        if (pageCompare) pageCompare.style.display = 'none';
-      } 
-      else if (tabName === 'prices') {
-        if (tabs[1]) tabs[1].classList.add('active'); 
-        if (pageSimulator) pageSimulator.style.display = 'none';
-        if (pageCompare) pageCompare.style.display = 'block';
-      }
+  if (tabName === 'simulator') {
+    if (tabs[0]) tabs[0].classList.add('active'); 
+    if (pageSimulator) pageSimulator.style.display = 'block';
+    if (pageCompare) pageCompare.style.display = 'none';
+  } 
+  else if (tabName === 'prices') {
+    if (tabs[1]) tabs[1].classList.add('active'); 
+    if (pageSimulator) pageSimulator.style.display = 'none';
+    if (pageCompare) pageCompare.style.display = 'block';
+}
     }
     function resetAllInputs() {
   // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す
