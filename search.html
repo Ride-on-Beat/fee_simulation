@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <title>携帯プランかんたん検索</title>
+  <style>
+    html,
+    body {
+      /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）を抑えつつ、
+            iframeとして埋め込まれた際に、下端/上端まで来たらスクロールを
+            親ページ（外側）へきちんと引き継げるよう "auto"（既定値）にする。
+            ※ "contain" や "none" だと、親ページへのスクロールの伝播（チェイン）が
+               ブロックされてしまい、スクロールバーを直接ドラッグしないと
+               動かせなくなってしまう */
+      overscroll-behavior-y: auto;
+    }
+
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .flex {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    .slider-group {
+      margin: 15px 0;
+    }
+
+    .slider-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #e9ecef;
+    }
+
+    /* 💡 コンテンツの一番下に置く「ここまでです」の目印。
+          固定ヘッダー/フッター構成では、内容が短い時に下に余白ができるため、
+          「もう内容は終わっている」ことが分かるようにしておく */
+    .end-marker {
+      text-align: center;
+      color: #adb5bd;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      margin-top: 30px;
+      padding-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>📱 携帯プランカタログ & 検索</h1>
+
+  <!-- 1. 選び方のコツ（簡易質問コーナー） -->
+  <div class="card">
+    <h3>💡 選び方のコツ（迷ったらタップ！）</h3>
+    <p>あなたの普段の使い方に近いものはどれですか？</p>
+    <div class="flex">
+      <button class="btn" onclick="applyGuide('low')">家にはWi-Fiがある（あまり外で使わない）</button>
+      <button class="btn" onclick="applyGuide('mid')">通勤・通学中にSNSや音楽を楽しみたい</button>
+      <button class="btn" onclick="applyGuide('high')">外でも動画やゲームをガンガン楽しみたい</button>
+    </div>
+  </div>
+
+  <!-- 2. スライダー・ソートコントロール -->
+  <div class="card">
+    <h3>🔍 条件で絞り込む</h3>
+
+    <div class="slider-group">
+      <label>必要データ容量: <span id="vol-val">20</span> GB 以上</label>
+      <input type="range" id="vol-slider" min="0" max="50" value="20" oninput="updateFilter()">
+    </div>
+
+    <div class="slider-group">
+      <label>月額料金の上限: <span id="price-val">4000</span> 円 以下</label>
+      <input type="range" id="price-slider" min="500" max="8000" step="500" value="4000" oninput="updateFilter()">
+    </div>
+
+    <div style="margin-top: 20px;">
+      <span>並び替え：</span>
+      <button class="btn active" id="sort-price" onclick="changeSort('price')">料金の安い順</button>
+      <button class="btn" id="sort-vol" onclick="changeSort('volume')">容量の多い順</button>
+    </div>
+  </div>
+
+  <!-- 3. 結果表示テーブル -->
+  <div class="card">
+    <h3>該当プラン一覧 (<span id="count">0</span>件)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>キャリア</th>
+          <th>プラン名</th>
+          <th>容量 (GB)</th>
+          <th>月額料金 (税込)</th>
+        </tr>
+      </thead>
+      <tbody id="plan-list">
+        <!-- JSでここに挿入 -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="end-marker">―― ここまでです ――</div>
+
+  <script>
+    // プランのマスターデータ
+    const masterPlans = [
+      { brand: "IIJmio", name: "ギガプラン 5ギガ", volume: 5, price: 990 },
+      { brand: "IIJmio", name: "ギガプラン 20ギガ", volume: 20, price: 2000 },
+      { brand: "ahamo", name: "ahamo", volume: 30, price: 2970 },
+      { brand: "LINEMO", name: "ベストプラン", volume: 10, price: 2090 },
+      { brand: "povo2.0", name: "データ追加20GB(30日)", volume: 20, price: 2700 },
+      { brand: "UQモバイル", name: "コミコミプラン", volume: 20, price: 3278 },
+      { brand: "ワイモバイル", name: "シンプル2 M", volume: 20, price: 4015 },
+      { brand: "楽天モバイル", name: "最強プラン(〜3GB)", volume: 3, price: 1078 },
+      { brand: "楽天モバイル", name: "最強プラン(無制限)", volume: 50, price: 3278 } // 無制限は便宜上50GBとして登録
+    ];
+
+    let currentSort = 'price'; // 'price' or 'volume'
+
+    // 選び方のコツ（ボタン）を押した時の処理
+    function applyGuide(type) {
+      const volSlider = document.getElementById('vol-slider');
+      const priceSlider = document.getElementById('price-slider');
+
+      if (type === 'low') {
+        volSlider.value = 3;
+        priceSlider.value = 1500;
+      } else if (type === 'mid') {
+        volSlider.value = 15;
+        priceSlider.value = 3000;
+      } else if (type === 'high') {
+        volSlider.value = 30;
+        priceSlider.value = 5000;
+      }
+      updateFilter();
+    }
+
+    // ソート順の変更
+    function changeSort(type) {
+      currentSort = type;
+      document.getElementById('sort-price').classList.toggle('active', type === 'price');
+      document.getElementById('sort-vol').classList.toggle('active', type === 'volume');
+      updateFilter();
+    }
+
+    // フィルター＆描画のコア処理
+    function updateFilter() {
+      const targetVol = parseInt(document.getElementById('vol-slider').value);
+      const targetPrice = parseInt(document.getElementById('price-slider').value);
+
+      // 数値表示の更新
+      document.getElementById('vol-val').textContent = targetVol === 50 ? "50(無制限含む)" : targetVol;
+      document.getElementById('price-val').textContent = targetPrice;
+
+      // 絞り込み
+      let filtered = masterPlans.filter(plan => plan.volume >= targetVol && plan.price <= targetPrice);
+
+      // 並び替え
+      if (currentSort === 'price') {
+        filtered.sort((a, b) => a.price - b.price);
+      } else {
+        filtered.sort((a, b) => b.volume - a.volume);
+      }
+
+      // HTMLへの出力
+      const tbody = document.getElementById('plan-list');
+      tbody.innerHTML = "";
+      document.getElementById('count').textContent = filtered.length;
+
+      filtered.forEach(plan => {
+        const row = `<tr>
+          <td><strong>${plan.brand}</strong></td>
+          <td>${plan.name}</td>
+          <td>${plan.volume === 50 ? '無制限' : plan.volume + ' GB'}</td>
+          <td>${plan.price.toLocaleString()} 円</td>
+        </tr>`;
+        tbody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+
+    // 初期起動時に実行
+    updateFilter();
+  </script>
+</body>
+
+</html>
