@@ -72,8 +72,11 @@
 
   html,
   body {
-    /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）や、リロード機能を無効化します */
-    overscroll-behavior-y: none !important;
+    /* 💡 ページ全体(body)はスクロールさせず、代わりに #app-scroll-area だけをスクロールさせる。
+          これにより、ヘッダー・フッターの上をスクロールバーが通過しなくなる */
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -83,6 +86,19 @@
     line-height: 1.6;
     margin: 0;
     padding: 0;
+  }
+
+  /* 💡 ヘッダーとフッターの間だけをスクロールさせる専用エリア。
+        --header-height と --footer-height はJSで実際の高さを測って設定する */
+  #app-scroll-area {
+    position: fixed;
+    top: var(--header-height, 70px);
+    bottom: var(--footer-height, 60px);
+    left: 0;
+    width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
   }
 
   .container {
@@ -613,9 +629,9 @@
     border: 1.8px solid #7c3aed !important;
   }
 
-  /* 📱 メインページの余白（固定フッター被り防止） */
+  /* 📱 メインページ（もともとの固定フッター被り防止の余白は
+        #app-scroll-area 導入により不要になったため削除） */
   .app-page {
-    padding-bottom: 100px !important;
     box-sizing: border-box;
   }
 
@@ -674,7 +690,7 @@
   }
 
   .veil-app-header {
-    position: sticky !important;
+    position: fixed !important;
     top: 0 !important;
     left: 0 !important;
     width: 100% !important;
@@ -820,10 +836,12 @@
     <span class="veil-brand-text">Veil</span>
   </div>
 
-  <!-- 📱 メインコンテンツ（スマホサイズを確実にキープするコンテナ） -->
-  <div id="page-simulator" class="app-page">
-    <h1 class="veil-outer-title">月額料金シミュレーション</h1>
-    <div class="container">
+  <!-- 📱 ヘッダーとフッターの間だけをスクロールさせる専用エリア -->
+  <div id="app-scroll-area">
+    <!-- 📱 メインコンテンツ（スマホサイズを確実にキープするコンテナ） -->
+    <div id="page-simulator" class="app-page">
+      <h1 class="veil-outer-title">月額料金シミュレーション</h1>
+      <div class="container">
 
       <div class="card">
         <h2>本体</h2>
@@ -1157,9 +1175,7 @@
       </button>
     </div>
   </div>
-  <div id="page-simulator">
-    <!-- シミュレーターの中身 -->
-  </div> <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
+  <!-- 👈 ここでしっかりシミュレーターの箱のフタを閉じる！ -->
 
   <!-- その下に、完全に独立させて iframe を置く -->
   <!-- 💡 高さは固定せず、中身の実際の高さに合わせてJSで自動調整する -->
@@ -1174,6 +1190,7 @@
     <iframe id="page-search" src="./search.html"
       style="width: 100%; height: 0; border: none; overflow: hidden;"></iframe>
   </div>
+  </div> <!-- 👈 #app-scroll-area を閉じる -->
 
   <footer class="app-footer">
     <div class="footer-tab active" onclick="switchTab('simulator')">
@@ -1194,6 +1211,25 @@
 
   <script>
     // =======================================================================================================================
+    // 📐 ヘッダー・フッターの実際の高さを測定し、#app-scroll-area の
+    // top / bottom（CSS変数 --header-height / --footer-height）に反映する。
+    // フォントの読み込みや画面回転で高さが変わることがあるため、複数タイミングで再計測する。
+    function updateAppShellMetrics() {
+      const header = document.querySelector('.veil-app-header');
+      const footer = document.querySelector('.app-footer');
+      if (header) {
+        document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
+      }
+      if (footer) {
+        document.documentElement.style.setProperty('--footer-height', footer.offsetHeight + 'px');
+      }
+    }
+
+    updateAppShellMetrics();
+    window.addEventListener('DOMContentLoaded', updateAppShellMetrics);
+    window.addEventListener('load', updateAppShellMetrics);
+    window.addEventListener('resize', updateAppShellMetrics);
+
     // ページを開いた瞬間の時間を記録
     const startTime = Date.now();
 
