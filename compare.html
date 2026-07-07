@@ -576,7 +576,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
-                        comment: "dポイント最大5,000ptで実質値引き。ドコモMAX同様4種類のうち2つの動画配信サイトが見放題。",
+                        comment: "dポイント最大5,000ptで実質値引き。<br>ドコモMAX同様4種類のうち2つの動画配信サイトが見放題。",
                         strages: [{ giga: "無制限", price: 11748 }]
                     },
                     {
@@ -621,6 +621,7 @@
                 au: [
                     {
                         id: "a_vl", name: "auバリューリンクプラン",
+                        allowDiscount: true,
                         comment: "無制限プランの基本サービスにPontaパスと地震サポートが<br>加わったプラン。<br>使用量に応じて料金が変動。",
                         strages: [
                             { giga: "~1GB", price: 6358 },
@@ -636,6 +637,7 @@
                     },
                     {
                         id: "a_full", name: "使い放題MAX+",
+                        allowDiscount: true,
                         comment: "シンプルな無制限プラン。<br>1GBを境に料金が変動。",
                         strages: [{ giga: "無制限", price: 7788 }]
                     },
@@ -648,6 +650,7 @@
                     },
                     {
                         id: "a_mini", name: "スマホミニプラン+",
+                        allowDiscount: true,
                         comment: "最大5GBの小容量プラン。<br>それぞれ1GBと3GBで料金が変動。",
                         strages: [
                             { giga: "~1GB", price: 4928 },
