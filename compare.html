@@ -268,6 +268,30 @@
         .sim-item-subtotal.is-discount {
             color: #0d6efd;
         }
+
+        /* 💡 割引の中で、さらにプルダウンでの選択が必要なもの（家族割・カード割など）を
+              チェックボックスの真下に、字下げした「入れ子」の見た目で表示する */
+        .sim-discount-sub {
+            margin: 6px 0 12px 22px;
+            padding: 10px 12px;
+            border-left: 3px solid #007bff;
+            background-color: #f0f7ff;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .sim-discount-sub select {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border-radius: 6px;
+            border: 1px solid #ced4da;
+            background-color: #fff;
+        }
+
+        .sim-discount-sub .sim-item-subtotal {
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 
@@ -324,34 +348,6 @@
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
                     <div id="sim-left-discount-subtotal" class="sim-item-subtotal is-discount"></div>
-                </div>
-
-                <div class="sim-field" id="sim-left-use-field" style="display: none;">
-                    <label>利用年数</label>
-                    <select id="sim-left-use" onchange="sim_calculateTotal('left')">
-                        <option value="">利用年数を選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-left-family-field" style="display: none;">
-                    <label>家族グループ人数</label>
-                    <select id="sim-left-family" onchange="sim_calculateTotal('left')">
-                        <option value="">家族割対象人数を選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-left-card-field" style="display: none;">
-                    <label>カード券種</label>
-                    <select id="sim-left-card" onchange="sim_calculateTotal('left')">
-                        <option value="">カードを選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-left-select-field" style="display: none;">
-                    <label>割引種類</label>
-                    <select id="sim-left-select" onchange="sim_calculateTotal('left')">
-                        <option value="">いずれかの割引を選択してください</option>
-                    </select>
                 </div>
 
                 <div class="sim-comment-box">
@@ -417,34 +413,6 @@
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
                     <div id="sim-right-discount-subtotal" class="sim-item-subtotal is-discount"></div>
-                </div>
-
-                <div class="sim-field" id="sim-right-use-field" style="display: none;">
-                    <label>利用年数</label>
-                    <select id="sim-right-use" onchange="sim_calculateTotal('right')">
-                        <option value="">利用年数を選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-right-family-field" style="display: none;">
-                    <label>家族グループ人数</label>
-                    <select id="sim-right-family" onchange="sim_calculateTotal('right')">
-                        <option value="">家族割対象人数を選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-right-card-field" style="display: none;">
-                    <label>カード券種</label>
-                    <select id="sim-right-card" onchange="sim_calculateTotal('right')">
-                        <option value="">カードを選択してください</option>
-                    </select>
-                </div>
-
-                <div class="sim-field" id="sim-right-select-field" style="display: none;">
-                    <label>割引種類</label>
-                    <select id="sim-right-select" onchange="sim_calculateTotal('right')">
-                        <option value="">いずれかの割引を選択してください</option>
-                    </select>
                 </div>
 
                 <div class="sim-comment-box">
@@ -892,9 +860,7 @@
             const company = document.getElementById(`sim-${side}-company`).value;
             const planSelect = document.getElementById(`sim-${side}-plan`);
 
-            sim_resetSelect(side, ['plan', 'strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
-
-            if (company && simData.plans[company]) {
+            sim_resetSelect(side, ['plan', 'strage', 'option', 'discount']);
                 simData.plans[company].forEach(plan => {
                     const opt = document.createElement("option");
                     opt.value = plan.id;
@@ -912,7 +878,7 @@
             const planId = document.getElementById(`sim-${side}-plan`).value;
             const strageSelect = document.getElementById(`sim-${side}-strage`);
 
-            sim_resetSelect(side, ['strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
+            sim_resetSelect(side, ['strage', 'option', 'discount']);
 
             if (company && planId) {
                 const selectedPlan = simData.plans[company].find(p => p.id === planId);
@@ -938,7 +904,7 @@
             const optionSelect = document.getElementById(`sim-${side}-option`);
             const discountContainer = document.getElementById(`sim-${side}-discount-container`);
 
-            sim_resetSelect(side, ['option', 'discount', 'use', 'family', 'card', 'select']);
+            sim_resetSelect(side, ['option', 'discount']);
 
             const currentPlan = (simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
 
@@ -962,19 +928,13 @@
             if (currentPlan && currentPlan.allowDiscount === true && discountContainer) {
                 discountContainer.innerHTML = '';
 
-                const useSelect = document.getElementById(`sim-${side}-use`);
-                const familySelect = document.getElementById(`sim-${side}-family`);
-                const cardSelect = document.getElementById(`sim-${side}-card`);
-                const selectSelect = document.getElementById(`sim-${side}-select`);
-                if (useSelect) useSelect.innerHTML = '<option value="">利用年数を選択してください</option>';
-                if (familySelect) familySelect.innerHTML = '<option value="">家族割対象人数を選択してください</option>';
-                if (cardSelect) cardSelect.innerHTML = '<option value="">カードを選択してください</option>';
-                if (selectSelect) selectSelect.innerHTML = '<option value="">いずれか選択してください</option>';
-
                 if (simData.discounts[company]) {
                     const denyList = currentPlan.denyDiscounts ? currentPlan.denyDiscounts : [];
                     simData.discounts[company].forEach(disc => {
                         if (denyList.includes(disc.id)) return;
+
+                        // 💡 このディスカウントが「さらにプルダウンでの選択が必要」なタイプかどうか
+                        const subList = disc.useYears || disc.family || disc.cards || disc.selects;
 
                         const label = document.createElement("label");
                         label.className = "sim-checkbox-label";
@@ -985,11 +945,41 @@
                         checkbox.value = disc.id;
                         checkbox.onchange = () => { sim_handleDiscountChange(side); };
 
-                        const displayText = (disc.useYears || disc.family || disc.cards || disc.selects) ? disc.name : `${disc.name}　▲¥${disc.value}`;
+                        const displayText = subList ? disc.name : `${disc.name}　▲¥${disc.value}`;
                         label.appendChild(checkbox);
                         label.appendChild(document.createTextNode(displayText));
 
                         discountContainer.appendChild(label);
+
+                        // 💡 プルダウン選択が必要な割引は、チェックボックスの真下に
+                        //     字下げした入れ子の形でプルダウン＋その割引専用の小計を生成する
+                        if (subList) {
+                            const subContainer = document.createElement("div");
+                            subContainer.className = "sim-discount-sub";
+                            subContainer.id = `sim-${side}-sub-${disc.id}`;
+                            subContainer.style.display = 'none';
+
+                            const subSelect = document.createElement("select");
+                            subSelect.id = `sim-${side}-subselect-${disc.id}`;
+                            subSelect.disabled = true;
+                            subSelect.innerHTML = '<option value="">選択してください</option>';
+                            subList.forEach(item => {
+                                if (denyList.includes(item.id)) return;
+                                const o = document.createElement("option");
+                                o.value = item.value;
+                                o.textContent = `${item.name}　▲¥${item.value}`;
+                                subSelect.appendChild(o);
+                            });
+                            subSelect.onchange = () => sim_calculateTotal(side);
+
+                            const subSubtotal = document.createElement("div");
+                            subSubtotal.className = "sim-item-subtotal is-discount";
+                            subSubtotal.id = `sim-${side}-subtotal-${disc.id}`;
+
+                            subContainer.appendChild(subSelect);
+                            subContainer.appendChild(subSubtotal);
+                            discountContainer.appendChild(subContainer);
+                        }
                     });
                 }
             }
@@ -998,111 +988,28 @@
 
         function sim_handleDiscountChange(side) {
             const company = document.getElementById(`sim-${side}-company`).value;
-            const planId = document.getElementById(`sim-${side}-plan`).value;
-            const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]:checked`);
+            const allCheckboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]`);
 
-            const useField = document.getElementById(`sim-${side}-use-field`);
-            const useSelect = document.getElementById(`sim-${side}-use`);
-            const familyField = document.getElementById(`sim-${side}-family-field`);
-            const familySelect = document.getElementById(`sim-${side}-family`);
-            const cardField = document.getElementById(`sim-${side}-card-field`);
-            const cardSelect = document.getElementById(`sim-${side}-card`);
-            const selectField = document.getElementById(`sim-${side}-select-field`);
-            const selectSelect = document.getElementById(`sim-${side}-select`);
+            allCheckboxes.forEach(cb => {
+                const disc = (simData.discounts[company]) ? simData.discounts[company].find(d => d.id === cb.value) : null;
+                if (!disc) return;
 
-            const currentPlan = (simData.plans[company]) ? simData.plans[company].find(p => p.id === planId) : null;
-            const denyList = currentPlan && currentPlan.denyDiscounts ? currentPlan.denyDiscounts : [];
+                const subList = disc.useYears || disc.family || disc.cards || disc.selects;
+                if (!subList) return; // プルダウン選択が不要な割引は何もしない
 
-            let hasUseDiscount = false;
-            let useDiscountData = null;
-            let hasFamilyDiscount = false;
-            let familyDiscountData = null;
-            let hasCardDiscount = false;
-            let cardDiscountData = null;
-            let hasSelectDiscount = false;
-            let selectDiscountData = null;
+                const subContainer = document.getElementById(`sim-${side}-sub-${disc.id}`);
+                const subSelect = document.getElementById(`sim-${side}-subselect-${disc.id}`);
+                const subSubtotal = document.getElementById(`sim-${side}-subtotal-${disc.id}`);
 
-            checkboxes.forEach(cb => {
-                const disc = simData.discounts[company].find(d => d.id === cb.value);
-                if (disc) {
-                    if (disc.useYears) { hasUseDiscount = true; useDiscountData = disc; }
-                    if (disc.family) { hasFamilyDiscount = true; familyDiscountData = disc; }
-                    if (disc.cards) { hasCardDiscount = true; cardDiscountData = disc; }
-                    if (disc.selects) { hasSelectDiscount = true; selectDiscountData = disc; }
+                if (cb.checked) {
+                    if (subContainer) subContainer.style.display = 'block';
+                    if (subSelect) subSelect.disabled = false;
+                } else {
+                    if (subContainer) subContainer.style.display = 'none';
+                    if (subSelect) { subSelect.value = ''; subSelect.disabled = true; }
+                    if (subSubtotal) subSubtotal.textContent = '';
                 }
             });
-
-            if (hasUseDiscount && useSelect) {
-                if (useSelect.innerHTML === '<option value="">利用年数を選択してください</option>') {
-                    useDiscountData.useYears.forEach(item => {
-                        if (denyList.includes(item.id)) return;
-                        const o = document.createElement("option");
-                        o.value = item.value;
-                        o.textContent = `${item.name}　▲¥${item.value}`;
-                        useSelect.appendChild(o);
-                    });
-                }
-                if (useField) useField.style.display = 'block';
-                useSelect.disabled = false;
-            } else if (useSelect) {
-                useSelect.innerHTML = '<option value="">利用年数を選択してください</option>';
-                if (useField) useField.style.display = 'none';
-                useSelect.disabled = true;
-            }
-
-            if (hasFamilyDiscount && familySelect) {
-                if (familySelect.innerHTML === '<option value="">家族割対象人数を選択してください</option>') {
-                    familyDiscountData.family.forEach(item => {
-                        if (denyList.includes(item.id)) return;
-                        const o = document.createElement("option");
-                        o.value = item.value;
-                        o.textContent = `${item.name}　▲¥${item.value}`;
-                        familySelect.appendChild(o);
-                    });
-                }
-                if (familyField) familyField.style.display = 'block';
-                familySelect.disabled = false;
-            } else if (familySelect) {
-                familySelect.innerHTML = '<option value="">家族割対象人数を選択してください</option>';
-                if (familyField) familyField.style.display = 'none';
-                familySelect.disabled = true;
-            }
-
-            if (hasCardDiscount && cardSelect) {
-                if (cardSelect.innerHTML === '<option value="">カードを選択してください</option>') {
-                    cardDiscountData.cards.forEach(card => {
-                        if (denyList.includes(card.id)) return;
-                        const o = document.createElement("option");
-                        o.value = card.value;
-                        o.textContent = `${card.name}　▲¥${card.value}`;
-                        cardSelect.appendChild(o);
-                    });
-                }
-                if (cardField) cardField.style.display = 'block';
-                cardSelect.disabled = false;
-            } else if (cardSelect) {
-                cardSelect.innerHTML = '<option value="">カードを選択してください</option>';
-                if (cardField) cardField.style.display = 'none';
-                cardSelect.disabled = true;
-            }
-
-            if (hasSelectDiscount && selectSelect) {
-                if (selectSelect.innerHTML === '<option value="">いずれか選択してください</option>') {
-                    selectDiscountData.selects.forEach(select => {
-                        if (denyList.includes(select.id)) return;
-                        const o = document.createElement("option");
-                        o.value = select.value;
-                        o.textContent = `${select.name}　▲¥${select.value}`;
-                        selectSelect.appendChild(o);
-                    });
-                }
-                if (selectField) selectField.style.display = 'block';
-                selectSelect.disabled = false;
-            } else if (selectSelect) {
-                selectSelect.innerHTML = '<option value="">いずれか選択してください</option>';
-                if (selectField) selectField.style.display = 'none';
-                selectSelect.disabled = true;
-            }
 
             sim_calculateTotal(side);
         }
@@ -1128,11 +1035,7 @@
             const labels = {
                 plan: 'プランを選択してください',
                 strage: '容量を選択ください',
-                option: 'いずれか選択してください',
-                use: '利用年数を選択してください',
-                family: '家族割対象人数を選択してください',
-                card: 'カードを選択ください',
-                select: 'いずれか選択ください'
+                option: 'いずれか選択してください'
             };
 
             const companyEl = document.getElementById(`sim-${side}-company`);
@@ -1171,10 +1074,6 @@
 
             const strageSelect = document.getElementById(`sim-${side}-strage`);
             const optionSelect = document.getElementById(`sim-${side}-option`);
-            const useSelect = document.getElementById(`sim-${side}-use`);
-            const familySelect = document.getElementById(`sim-${side}-family`);
-            const cardSelect = document.getElementById(`sim-${side}-card`);
-            const selectSelect = document.getElementById(`sim-${side}-select`);
 
             const strageSubtotal = document.getElementById(`sim-${side}-strage-subtotal`);
             const optionSubtotal = document.getElementById(`sim-${side}-option-subtotal`);
@@ -1184,23 +1083,33 @@
             const optionPrice = (optionSelect && optionSelect.value) ? parseInt(optionSelect.value) : 0;
 
             let totalDiscountPrice = 0;
+            let errors = [];
             const checkboxes = document.querySelectorAll(`input[name="sim-${side}-discount-cb"]:checked`);
 
             if (company && simData.discounts[company]) {
                 checkboxes.forEach(cb => {
                     const disc = simData.discounts[company].find(d => d.id === cb.value);
-                    if (disc) {
-                        if (disc.useYears) {
-                            totalDiscountPrice += (useSelect && useSelect.value) ? parseInt(useSelect.value) : 0;
-                        } else if (disc.family) {
-                            totalDiscountPrice += (familySelect && familySelect.value) ? parseInt(familySelect.value) : 0;
-                        } else if (disc.cards) {
-                            totalDiscountPrice += (cardSelect && cardSelect.value) ? parseInt(cardSelect.value) : 0;
-                        } else if (disc.selects) {
-                            totalDiscountPrice += (selectSelect && selectSelect.value) ? parseInt(selectSelect.value) : 0;
+                    if (!disc) return;
+
+                    const subList = disc.useYears || disc.family || disc.cards || disc.selects;
+
+                    if (subList) {
+                        // 💡 プルダウン選択が必要な割引：そのプルダウンの値を使い、
+                        //     この割引専用の小計を、割引合計とは別に表示する
+                        const subSelect = document.getElementById(`sim-${side}-subselect-${disc.id}`);
+                        const subSubtotal = document.getElementById(`sim-${side}-subtotal-${disc.id}`);
+                        const val = subSelect ? subSelect.value : "";
+
+                        if (val === "") {
+                            errors.push(`「${disc.name}」の内容を選択してください。`);
+                            if (subSubtotal) subSubtotal.textContent = "";
                         } else {
-                            totalDiscountPrice += disc.value;
+                            const amount = parseInt(val);
+                            totalDiscountPrice += amount;
+                            if (subSubtotal) subSubtotal.textContent = `小計：▲¥${amount.toLocaleString()}`;
                         }
+                    } else {
+                        totalDiscountPrice += disc.value;
                     }
                 });
             }
@@ -1219,21 +1128,6 @@
                 discountSubtotal.textContent = (checkboxes.length > 0)
                     ? `小計：▲¥${totalDiscountPrice.toLocaleString()}`
                     : "";
-            }
-
-            let errors = [];
-
-            if (useSelect && useSelect.disabled === false && useSelect.value === "") {
-                errors.push("「利用年数」を選択してください。");
-            }
-            if (familySelect && familySelect.disabled === false && familySelect.value === "") {
-                errors.push("「家族割対象人数」を選択してください。");
-            }
-            if (cardSelect && cardSelect.disabled === false && cardSelect.value === "") {
-                errors.push("「支払いカード」を選択してください。");
-            }
-            if (selectSelect && selectSelect.disabled === false && selectSelect.value === "") {
-                errors.push("「いずれかの項目」を選択してください。");
             }
 
             if (errors.length > 0) {
@@ -1263,7 +1157,7 @@
             const companySelect = document.getElementById(`sim-${side}-company`);
             if (companySelect) companySelect.value = "";
 
-            sim_resetSelect(side, ['plan', 'strage', 'option', 'discount', 'use', 'family', 'card', 'select']);
+            sim_resetSelect(side, ['plan', 'strage', 'option', 'discount']);
 
             sim_updateComment(side);
             sim_calculateTotal(side);
