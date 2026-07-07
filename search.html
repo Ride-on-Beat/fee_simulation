@@ -1,22 +1,87 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <title>携帯プランかんたん検索</title>
   <style>
-    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background: #f5f7fa; color: #333; }
-    .card { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-    .flex { display: flex; gap: 15px; flex-wrap: wrap; }
-    .btn { padding: 8px 15px; border: 1px solid #ccc; background: white; border-radius: 4px; cursor: pointer; }
-    .btn.active { background: #007bff; color: white; border-color: #007bff; }
-    .slider-group { margin: 15px 0; }
-    .slider-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-    input[type="range"] { width: 100%; max-width: 400px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border-bottom: 1px solid #ddd; padding: 12px; text-align: left; }
-    th { background: #e9ecef; }
+    html,
+    body {
+      /* 🚫 上下に引っ張ったときのブラウザ固有のバウンス（跳ね返り）や、リロード機能を無効化します */
+      overscroll-behavior-y: none !important;
+    }
+
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f7fa;
+      color: #333;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .flex {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 15px;
+      border: 1px solid #ccc;
+      background: white;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn.active {
+      background: #007bff;
+      color: white;
+      border-color: #007bff;
+    }
+
+    .slider-group {
+      margin: 15px 0;
+    }
+
+    .slider-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #e9ecef;
+    }
   </style>
 </head>
+
 <body>
 
   <h1>📱 携帯プランカタログ & 検索</h1>
@@ -35,7 +100,7 @@
   <!-- 2. スライダー・ソートコントロール -->
   <div class="card">
     <h3>🔍 条件で絞り込む</h3>
-    
+
     <div class="slider-group">
       <label>必要データ容量: <span id="vol-val">20</span> GB 以上</label>
       <input type="range" id="vol-slider" min="0" max="50" value="20" oninput="updateFilter()">
@@ -152,4 +217,5 @@
     updateFilter();
   </script>
 </body>
+
 </html>
