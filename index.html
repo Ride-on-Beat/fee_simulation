@@ -2379,67 +2379,6 @@
     const pageCompareWrapper = document.getElementById('page-compare-wrapper');
     const pageSearchWrapper = document.getElementById('page-search-wrapper');
 
-    // =======================================================================================================================
-    // 🩺【一時的なデバッグ表示】原因特定のため、各種の高さの実測値を画面右上に小さく表示する。
-    // 原因が分かったら、この一式は削除して問題ありません。
-    (function setupDebugPanel() {
-      const panel = document.createElement('div');
-      panel.id = 'veil-debug-panel';
-      panel.style.cssText = [
-        'position: fixed',
-        'top: 4px',
-        'right: 4px',
-        'z-index: 999999',
-        'background: rgba(0,0,0,0.75)',
-        'color: #0f0',
-        'font-size: 10px',
-        'font-family: monospace',
-        'padding: 6px 8px',
-        'border-radius: 6px',
-        'line-height: 1.5',
-        'white-space: pre',
-        'pointer-events: none',
-        'max-width: 60vw'
-      ].join(';');
-      document.body.appendChild(panel);
-
-      function updateDebugPanel() {
-        const vv = window.visualViewport;
-        const scrollArea = document.getElementById('app-scroll-area');
-        const compareWrapper = document.getElementById('page-compare-wrapper');
-        const searchWrapper = document.getElementById('page-search-wrapper');
-        const compareIframe = document.getElementById('page-compare');
-        const searchIframe = document.getElementById('page-search');
-
-        const activeIframe = (compareWrapper && compareWrapper.style.display !== 'none') ? compareIframe
-          : (searchWrapper && searchWrapper.style.display !== 'none') ? searchIframe
-          : null;
-
-        let iframeInnerScrollHeight = 'N/A';
-        try {
-          if (activeIframe) {
-            const d = activeIframe.contentDocument || activeIframe.contentWindow.document;
-            iframeInnerScrollHeight = d.documentElement.scrollHeight + ' / body:' + d.body.scrollHeight;
-          }
-        } catch (e) {
-          iframeInnerScrollHeight = 'エラー: ' + e.message;
-        }
-
-        panel.textContent =
-          'window.innerHeight: ' + window.innerHeight + '\n' +
-          'visualViewport.height: ' + (vv ? Math.round(vv.height) : 'なし') + '\n' +
-          'visualViewport.offsetTop: ' + (vv ? Math.round(vv.offsetTop) : 'なし') + '\n' +
-          '--header-height: ' + getComputedStyle(document.documentElement).getPropertyValue('--header-height') + '\n' +
-          '--footer-height: ' + getComputedStyle(document.documentElement).getPropertyValue('--footer-height') + '\n' +
-          'scrollArea.offsetHeight: ' + (scrollArea ? scrollArea.offsetHeight : 'N/A') + '\n' +
-          'scrollArea.scrollHeight: ' + (scrollArea ? scrollArea.scrollHeight : 'N/A') + '\n' +
-          'iframe.style.height: ' + (activeIframe ? activeIframe.style.height : 'N/A') + '\n' +
-          'iframe中身scrollHeight: ' + iframeInnerScrollHeight;
-      }
-
-      updateDebugPanel();
-      setInterval(updateDebugPanel, 500);
-    })();
 
 
     // =======================================================================================================================
@@ -2449,8 +2388,14 @@
       if (!iframe) return;
       try {
         const doc = iframe.contentDocument || iframe.contentWindow.document;
-        if (doc && doc.documentElement) {
-          let newHeight = Math.max(doc.documentElement.scrollHeight, doc.body ? doc.body.scrollHeight : 0);
+        if (doc && doc.body) {
+          // 💡【重要】documentElement(html)のscrollHeightは使わない。
+          //     <html>は仕様上「自分の現在のビューポート（＝今設定しているiframeの高さ）」より
+          //     小さくは絶対にならないため、documentElementの値を使うと
+          //     「measure → 少し大きめにset → 次のmeasureはそれより小さくならない → …」
+          //     という自己参照的な膨張ループになってしまう。
+          //     実際の中身の高さを表すのは body.scrollHeight の方。
+          let newHeight = doc.body.scrollHeight;
 
           // 💡 想定外の理由で高さが際限なく大きくなってしまうのを防ぐための安全上限
           const SAFE_MAX_HEIGHT = 8000;
