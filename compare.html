@@ -97,10 +97,12 @@
         }
 
         .sim-total-column p {
-            white-space: nowrap;
-            /* 中のpタグ（文字）だけを1行に固定！ */
             margin: 5px 0;
             /* 上下のすき間をちょっと綺麗に整える */
+            /* 💡 横並び固定(nowrap)をやめ、狭い枠でも折り返せるようにする */
+            white-space: normal;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .sim-result-title {
@@ -115,6 +117,18 @@
             font-weight: bold;
             color: #dc3545;
             margin: 0;
+        }
+
+        /* 💡 スマホ幅では、プラン枠が画面の半分しかなく窮屈になるため、
+              合計金額の文字サイズを小さくしてはみ出しを防ぐ */
+        @media (max-width: 480px) {
+            .sim-result-title {
+                font-size: 13px;
+            }
+
+            .sim-result-price {
+                font-size: 20px;
+            }
         }
 
         /* 各フォームパーツの装飾 */
@@ -240,13 +254,8 @@
             color: #0d6efd;
         }
 
-        /* 💡 スマホ幅の場合、外側サイトの共通フッターに一番下の合計欄が
-              隠れてしまわないよう、下に余白を追加しておく（iframe埋め込み対策） */
-        @media (max-width: 768px) {
-            .sim-base-card {
-                padding-bottom: 100px;
-            }
-        }
+        /* 💡 以前はiframe埋め込み時のフッター被り防止でここに余白を追加していたが、
+              親ページ側で専用スクロールエリアを導入したことで不要になったため削除 */
     </style>
 </head>
 
@@ -343,9 +352,8 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-left-total-container">
-                        <p class="sim-result-title" style="display: inline-block; margin-right: 10px;">比較プラン A 合計料金</p>
-                        <p class="sim-result-price" style="display: inline-block;"><span id="sim-left-total">¥0</span> / 月
-                        </p>
+                        <p class="sim-result-title">比較プラン A 合計料金</p>
+                        <p class="sim-result-price"><span id="sim-left-total">¥0</span> / 月</p>
                     </div>
                     <p id="sim-left-error-msg" class="sim-error-message" style="display: none;"></p>
                 </div>
@@ -439,9 +447,8 @@
                 <!-- 💡 合計金額をこのプラン枠の中に内包する -->
                 <div class="sim-total-column">
                     <div id="sim-right-total-container">
-                        <p class="sim-result-title" style="display: inline-block; margin-right: 10px;">比較プラン B 合計料金</p>
-                        <p class="sim-result-price" style="display: inline-block;"><span id="sim-right-total">¥0</span> / 月
-                        </p>
+                        <p class="sim-result-title">比較プラン B 合計料金</p>
+                        <p class="sim-result-price"><span id="sim-right-total">¥0</span> / 月</p>
                     </div>
                     <p id="sim-right-error-msg" class="sim-error-message" style="display: none;"></p>
                 </div>
