@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="color-scheme" content="light">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -763,27 +763,30 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    height: 100dvh;
+    /* 対応ブラウザでは、Safari等のツールバー分の変動も含めた実際の高さに追従 */
     background-color: #7a99cf;
     /* 画像の背景色に合わせると綺麗です */
     z-index: 99999;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.6s ease;
     /* 消える時のフェードアウトだけ残す */
 
-    /* 画像自体を全画面にするので、flex関連の配置指定は不要になります */
+    /* 💡 画像を画面いっぱいに引き伸ばすのをやめ、青い背景の上に
+          程よいサイズで中央配置するため、flexで中央寄せにする */
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  /* 画像を画面いっぱいに表示する設定 */
+  /* 💡 画像を全画面に引き伸ばすと、画像自体に含まれる余白（白地部分）が
+        目立って「白い余白」に見えてしまうため、程よいサイズに収めて中央配置する */
   .loader-logo {
-    width: 100vw;
-    /* 画面の横幅いっぱいに */
-    height: 100vh;
-    /* 画面の縦幅いっぱいに */
-
-    /* ↓ここが一番のポイント！ */
-    /* cover：画像を切り抜いてでも、画面全体に隙間なく引き伸ばす（スマホの壁紙みたいなイメージ） */
-    /* contain：画像全体が画面に収まるように、比率を保ったまま最大化する */
+    width: auto;
+    height: auto;
+    max-width: 55%;
+    max-height: 55%;
     object-fit: contain;
 
     /* アニメーション（animation: pulse...）の行は削除します */
@@ -1211,24 +1214,38 @@
 
   <script>
     // =======================================================================================================================
-    // 📐 ヘッダー・フッターの実際の高さを測定し、#app-scroll-area の
-    // top / bottom（CSS変数 --header-height / --footer-height）に反映する。
-    // フォントの読み込みや画面回転で高さが変わることがあるため、複数タイミングで再計測する。
-    function updateAppShellMetrics() {
-      const header = document.querySelector('.veil-app-header');
+    // 📱 iOS Safariのアドレスバー（画面下部のツールバー）対策。
+    // このツールバーは自動で表示/非表示が切り替わるが、"position: fixed; bottom: 0"だけでは
+    // 実際に見えている範囲（Visual Viewport）の下端まで正しく追従しないことがあり、
+    // フッターの下に隙間ができてしまうことがある。
+    // window.visualViewport を使って、本当に見えている下端の位置に合わせてフッターを再配置し、
+    // そのズレ分も #app-scroll-area の下端オフセットに反映する。
+    function syncFooterToVisualViewport() {
+      const vv = window.visualViewport;
       const footer = document.querySelector('.app-footer');
+      const header = document.querySelector('.veil-app-header');
+      if (!footer) return;
+
+      const hiddenBottom = vv ? Math.max(0, window.innerHeight - (vv.height + vv.offsetTop)) : 0;
+
+      // 💡 CSS側の "bottom: 0 !important" に勝つよう、important優先度で上書きする
+      footer.style.setProperty('bottom', hiddenBottom + 'px', 'important');
+
       if (header) {
         document.documentElement.style.setProperty('--header-height', header.offsetHeight + 'px');
       }
-      if (footer) {
-        document.documentElement.style.setProperty('--footer-height', footer.offsetHeight + 'px');
-      }
+      // フッター自体の高さ＋ツールバー分のズレを合算して #app-scroll-area の下端オフセットにする
+      document.documentElement.style.setProperty('--footer-height', (footer.offsetHeight + hiddenBottom) + 'px');
     }
 
-    updateAppShellMetrics();
-    window.addEventListener('DOMContentLoaded', updateAppShellMetrics);
-    window.addEventListener('load', updateAppShellMetrics);
-    window.addEventListener('resize', updateAppShellMetrics);
+    syncFooterToVisualViewport();
+    window.addEventListener('DOMContentLoaded', syncFooterToVisualViewport);
+    window.addEventListener('load', syncFooterToVisualViewport);
+    window.addEventListener('resize', syncFooterToVisualViewport);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', syncFooterToVisualViewport);
+      window.visualViewport.addEventListener('scroll', syncFooterToVisualViewport);
+    }
 
     // ページを開いた瞬間の時間を記録
     const startTime = Date.now();
@@ -1244,12 +1261,16 @@
 
       // 計算した時間だけ待ってからフェードアウトを開始
       setTimeout(() => {
-        loader.style.opacity = '0'; // 薄くしていく
+        if (loader) loader.style.opacity = '0'; // 薄くしていく
 
-        // CSSのtransition（0.4秒）が終わった頃に完全に非表示（クリックできるように）にする
+        // CSSのtransition（0.6秒）が終わった頃に完全に非表示（クリックできるように）にする
         setTimeout(() => {
-          loader.style.display = 'none';
-        }, 400);
+          if (loader) loader.style.display = 'none';
+
+          // 🔄 ローダーが完全に消えたタイミングで、満を持してスクロールを解禁！
+          document.body.classList.remove('is-loading');
+          window.scrollTo(0, 0);
+        }, 600);
       }, remainingTime);
     });
 
@@ -2469,26 +2490,9 @@
     }
     window.addEventListener('DOMContentLoaded', updatePriceOptions);
     // 1. ページが開いた瞬間、即座にスクロールを禁止
+    // 💡 解除（フェードアウト完了後のis-loading除去とスクロール位置リセット）は、
+    //    上部の window.addEventListener('load', ...) 内に1本化してあります
     document.body.classList.add('is-loading');
-
-    // 2. ページを開いた瞬間から「2400ms（2.4秒）」のカウントダウンをスタート
-    setTimeout(() => {
-      const loader = document.getElementById('loader');
-
-      if (loader) {
-        // まず不透明度を0にして、じわっと消し始める（CSSの transition: opacity 0.4s が効く）
-        loader.style.opacity = '0';
-
-        // 3. フェードアウトのアニメーション（0.4秒 = 400ms）が終わるのを待ってから完全に消す
-        setTimeout(() => {
-          loader.style.display = 'none';
-
-          // 🔄 ここで満を持してスクロールを解禁！
-          document.body.classList.remove('is-loading');
-          window.scrollTo(0, 0);
-        }, 400); // フェードアウトの時間
-      }
-    }, 2400); // 👈 ここで「最低限表示したい秒数」を確実にロックします
 
     // =======================================================================================================================
     // 🛡 セーフティネット：スマホでアプリを切り替えたりロック画面にしたりすると、
@@ -2499,9 +2503,9 @@
     // そのため、演出に十分な時間が経過していれば、いつでも強制的にロックを解除する。
     function forceUnlockScrollIfStuck() {
       const elapsed = Date.now() - startTime;
-      // 演出時間(2400ms) + フェードアウト(400ms) より確実に長い時間が経っていれば、
+      // 演出時間(2400ms) + フェードアウト(600ms) より確実に長い時間が経っていれば、
       // 通常のタイマーで既に解除されているはずなので、念のため強制的にも解除する
-      if (elapsed >= 3000) {
+      if (elapsed >= 3200) {
         document.body.classList.remove('is-loading');
         const loader = document.getElementById('loader');
         if (loader && loader.style.display !== 'none') {
