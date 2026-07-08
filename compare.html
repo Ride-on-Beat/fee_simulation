@@ -37,6 +37,9 @@
         }
 
         .sim-title {
+            /* 💡 共通style.cssのh2ルールがdisplay:flexを指定しており、
+                  text-alignが効かなくなってしまうため、blockに戻す */
+            display: block;
             text-align: center;
             margin-bottom: 30px;
             color: #e6710d;
@@ -204,6 +207,7 @@
 
         /* 💡「④ 割引」ラベルも、改行後の2行目を1文字分字下げする */
         .sim-field label.sim-discount-label {
+            text-align: left;
             padding-left: 1.5em;
             text-indent: -1.5em;
         }
@@ -256,6 +260,7 @@
             /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
                   padding-leftで全体を1em右にずらし、1行目だけtext-indentで
                   元の位置に戻すことで、2行目以降だけがインデントされる */
+            text-align: left;
             padding-left: 1.5em;
             text-indent: -1.5em;
         }
@@ -594,6 +599,7 @@
             /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
                   padding-leftで全体を1em右にずらし、1行目だけtext-indentで
                   元の位置に戻すことで、2行目以降だけがインデントされる */
+            text-align: left;
             padding-left: 1.5em;
             text-indent: -1.5em;
         }
