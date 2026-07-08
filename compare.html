@@ -246,6 +246,11 @@
                   （スペースや記号の前後）で改行されるようにする */
             word-break: keep-all;
             overflow-wrap: break-word;
+            /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
+                  padding-leftで全体を1em右にずらし、1行目だけtext-indentで
+                  元の位置に戻すことで、2行目以降だけがインデントされる */
+            padding-left: 1em;
+            text-indent: -1em;
         }
 
         .sim-placeholder {
@@ -398,7 +403,7 @@
                 </div>
 
                 <div class="sim-field">
-                    <label>④ 割引（対象なら選択、複数選択可）</label>
+                    <label>④ 割引（対象なら<br>選択、複数選択可）</label>
                     <div id="sim-left-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -493,7 +498,7 @@
                 </div>
 
                 <div class="sim-field">
-                    <label>④ 割引（対象なら選択、複数選択可）</label>
+                    <label>④ 割引（対象なら<br>選択、複数選択可）</label>
                     <div id="sim-right-discount-container" class="sim-checkbox-container">
                         <span class="sim-placeholder">対象なら選択してください</span>
                     </div>
@@ -579,6 +584,11 @@
                   （スペースや記号の前後）で改行されるようにする */
             word-break: keep-all;
             overflow-wrap: break-word;
+            /* 💡 2行目以降を1文字分字下げする「ぶら下げインデント」。
+                  padding-leftで全体を1em右にずらし、1行目だけtext-indentで
+                  元の位置に戻すことで、2行目以降だけがインデントされる */
+            padding-left: 1em;
+            text-indent: -1em;
         }
 
         .sim-placeholder {
