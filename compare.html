@@ -241,6 +241,11 @@
         .sim-checkbox-container .sim-checkbox-label span {
             flex: 1;
             min-width: 0;
+            /* 💡「セット割」のような単語の途中で改行されてしまうのを防ぎ、
+                  単語（カタカナ・漢字の連続）を保ったまま、区切りの良い位置
+                  （スペースや記号の前後）で改行されるようにする */
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
 
         .sim-placeholder {
@@ -569,6 +574,11 @@
         .sim-checkbox-container .sim-checkbox-label span {
             flex: 1;
             min-width: 0;
+            /* 💡「セット割」のような単語の途中で改行されてしまうのを防ぎ、
+                  単語（カタカナ・漢字の連続）を保ったまま、区切りの良い位置
+                  （スペースや記号の前後）で改行されるようにする */
+            word-break: keep-all;
+            overflow-wrap: break-word;
         }
 
         .sim-placeholder {
@@ -889,15 +899,15 @@
                     },
                     {
                         id: "d_disc_card",
-                        name: "dカード<br>お支払い割",
+                        name: "dカードお支払い割",
                         value: 0,
                         cards: [
                             { id: "d_card_regular", name: "dカード REGULAR", value: 220 },
                             { id: "d_card_GGUP", name: "dカード GOLD U / GOLD / PLUTINUM", value: 550 }
                         ]
                     },
-                    { id: "d_disc_net", name: "ドコモ光 / <br>home 5G<br>セット割", value: 1210 },
-                    { id: "d_disc_ele", name: "ドコモでんき<br>セット割", value: 110 }
+                    { id: "d_disc_net", name: "ドコモ光 / home 5G セット割", value: 1210 },
+                    { id: "d_disc_ele", name: "ドコモでんきセット割", value: 110 }
                 ],
                 au: [
                     {
@@ -909,15 +919,15 @@
                             { id: "a_family_3", name: "3人以上", value: 1210 }
                         ]
                     },
-                    { id: "a_disc_value", name: "auスマート<br>バリュー", value: 1100 },
-                    { id: "a_disc_card", name: "au PAY カード<br>お支払い割", value: 110 }
+                    { id: "a_disc_value", name: "auスマートバリュー", value: 1100 },
+                    { id: "a_disc_card", name: "au PAY カードお支払い割", value: 110 }
 
                 ],
                 UQ: [
                     { id: "u_disc_family", name: "au PAY カードお支払い割", value: 220 },
                     {
                         id: "u_disc_select",
-                        name: "自宅または<br>家族セット割",
+                        name: "自宅または家族セット割",
                         value: 0,
                         selects: [
                             { id: "u_select_home", name: "自宅セット割", value: 1100 },
@@ -937,10 +947,10 @@
                             { id: "s_family_3mini", name: "3人以上", value: 550 },
                         ]
                     },
-                    { id: "s_disc_net", name: "おうち割光<br>セット", value: 1100 },
+                    { id: "s_disc_net", name: "おうち割光セット", value: 1100 },
                     {
                         id: "s_disc_card",
-                        name: "PayPayカード<br>割",
+                        name: "PayPayカード割",
                         value: 0,
                         cards: [
                             { id: "s_pay", name: "PayPayカード", value: 330 },
@@ -951,7 +961,7 @@
                 Ymobile: [
                     {
                         id: "y_disc_card",
-                        name: "PayPayカード<br>割",
+                        name: "PayPayカード割",
                         value: 0,
                         cards: [
                             { id: "y_pay", name: "PayPayカード", value: 330 },
@@ -960,7 +970,7 @@
                     },
                     {
                         id: "y_disc_select",
-                        name: "おうちまたは<br>家族割",
+                        name: "おうちまたは家族割",
                         value: 0,
                         selects: [
                             { id: "y_disc_net", name: "おうち割 光セット(A)", value: 1650 },
@@ -1084,7 +1094,11 @@
                         checkbox.onchange = () => { sim_handleDiscountChange(side); };
 
                         const textSpan = document.createElement("span");
-                        textSpan.textContent = disc.name;
+                        // 💡 スペースの無い長い項目名は、任意の位置で自然に改行できるよう
+                        //     <wbr>（改行してよい位置の目印）を入れておく
+                        textSpan.innerHTML = disc.name
+                            .replace('カードお支払い割', 'カード<wbr>お支払い割')
+                            .replace('PayPayカード割', 'PayPay<wbr>カード<wbr>割');
 
                         label.appendChild(checkbox);
                         label.appendChild(textSpan);
