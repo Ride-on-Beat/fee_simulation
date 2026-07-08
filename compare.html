@@ -346,7 +346,7 @@
 
     <div class="sim-base-card">
         <h1 class="veil-outer-title">料金比較</h1>
-        <h2 class="sim-title">料金比較（主要プラン及び通話、主要割引のみ）</h2>
+        <h2 class="sim-title">※主要プラン、通話、主要割引のみ</h2>
 
         <!-- 1. 上段：プラン選択エリア（左右に並ぶ） -->
         <div class="sim-main-box">
@@ -371,7 +371,7 @@
                 <div class="sim-field">
                     <label>② プラン</label>
                     <select id="sim-left-plan" onchange="sim_updateStrages('left')" disabled>
-                        <option value="">先に選択してください</option>
+                        <option value="">先に携帯会社を選択してください</option>
                     </select>
                     <div id="sim-left-plan-subtotal" class="sim-item-subtotal"></div>
                 </div>
@@ -889,15 +889,15 @@
                     },
                     {
                         id: "d_disc_card",
-                        name: "dカードお支払い割",
+                        name: "dカード<br>お支払い割",
                         value: 0,
                         cards: [
                             { id: "d_card_regular", name: "dカード REGULAR", value: 220 },
                             { id: "d_card_GGUP", name: "dカード GOLD U / GOLD / PLUTINUM", value: 550 }
                         ]
                     },
-                    { id: "d_disc_net", name: "ドコモ光 / home 5G セット割", value: 1210 },
-                    { id: "d_disc_ele", name: "ドコモでんきセット割", value: 110 }
+                    { id: "d_disc_net", name: "ドコモ光 / <br>home 5G<br>セット割", value: 1210 },
+                    { id: "d_disc_ele", name: "ドコモでんき<br>セット割", value: 110 }
                 ],
                 au: [
                     {
@@ -909,15 +909,15 @@
                             { id: "a_family_3", name: "3人以上", value: 1210 }
                         ]
                     },
-                    { id: "a_disc_value", name: "auスマートバリュー", value: 1100 },
-                    { id: "a_disc_card", name: "au PAY カードお支払い割", value: 110 }
+                    { id: "a_disc_value", name: "auスマート<br>バリュー", value: 1100 },
+                    { id: "a_disc_card", name: "au PAY カード<br>お支払い割", value: 110 }
 
                 ],
                 UQ: [
                     { id: "u_disc_family", name: "au PAY カードお支払い割", value: 220 },
                     {
                         id: "u_disc_select",
-                        name: "どちらか選択",
+                        name: "自宅または<br>家族セット割",
                         value: 0,
                         selects: [
                             { id: "u_select_home", name: "自宅セット割", value: 1100 },
@@ -937,10 +937,10 @@
                             { id: "s_family_3mini", name: "3人以上", value: 550 },
                         ]
                     },
-                    { id: "s_disc_net", name: "おうち割光セット", value: 1100 },
+                    { id: "s_disc_net", name: "おうち割光<br>セット", value: 1100 },
                     {
                         id: "s_disc_card",
-                        name: "PayPayカード割",
+                        name: "PayPayカード<br>割",
                         value: 0,
                         cards: [
                             { id: "s_pay", name: "PayPayカード", value: 330 },
@@ -951,7 +951,7 @@
                 Ymobile: [
                     {
                         id: "y_disc_card",
-                        name: "PayPayカード割",
+                        name: "PayPayカード<br>割",
                         value: 0,
                         cards: [
                             { id: "y_pay", name: "PayPayカード", value: 330 },
@@ -960,7 +960,7 @@
                     },
                     {
                         id: "y_disc_select",
-                        name: "いずれか選択",
+                        name: "おうちまたは<br>家族割",
                         value: 0,
                         selects: [
                             { id: "y_disc_net", name: "おうち割 光セット(A)", value: 1650 },
@@ -1011,7 +1011,7 @@
                     selectedPlan.strages.forEach(vol => {
                         const opt = document.createElement("option");
                         opt.value = vol.price;
-                        opt.textContent = `${vol.giga} 　¥${vol.price.toLocaleString()}`;
+                        opt.textContent = `${vol.giga}`;
                         opt.dataset.allowDiscount = selectedPlan.allowDiscount;
                         strageSelect.appendChild(opt);
                     });
@@ -1048,7 +1048,7 @@
                             if (denyOptionList.includes(opt.id)) return;
                             const o = document.createElement("option");
                             o.value = opt.price;
-                            o.textContent = `${opt.name} 　¥${opt.price}`;
+                            o.textContent = `${opt.name}`;
                             optionSelect.appendChild(o);
                         });
                         optionSelect.disabled = false;
@@ -1254,12 +1254,12 @@
         function sim_resetSelect(side, targets) {
             const labels = {
                 plan: 'プランを選択してください',
-                strage: '容量を選択ください',
+                strage: '容量を選択してください',
                 option: 'いずれか選択してください', // 💡「容量」から「オプション」に修正
                 use: '利用年数を選択してください',
                 family: '家族割対象人数を選択してください',
-                card: 'カードを選択ください',
-                select: 'いずれか選択ください'
+                card: 'カードを選択してください',
+                select: 'いずれか選択してください'
             };
 
             // 💡 現在の会社の選択状況を取得
