@@ -122,18 +122,17 @@
         }
 
         /* 💡 合計金額タイトルを①キャリア/②プラン名/③容量でネスト表示する。
-              ラベル（①②③）側を字下げし、値はフラットな位置のままにすることで、
-              ラベルの真下が空いて見えるようにする */
+              ラベル（①②③）は左詰め、値は改行した後インデントして表示する */
         .sim-title-line {
             display: block;
             text-align: left;
             font-weight: bold;
             font-size: 13px;
-            margin-left: 18px;
+            margin-left: 0;
         }
 
         .sim-title-value {
-            margin-left: 0;
+            margin-left: 18px;
             margin-bottom: 10px;
             font-weight: 600;
             font-size: 8px;
@@ -406,6 +405,7 @@
                     <select id="sim-left-use" onchange="sim_calculateTotal('left')">
                         <option value="">利用年数を選択してください</option>
                     </select>
+                    <div id="sim-left-use-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-family-field" style="display: none;">
@@ -413,6 +413,7 @@
                     <select id="sim-left-family" onchange="sim_calculateTotal('left')">
                         <option value="">家族割対象人数を選択してください</option>
                     </select>
+                    <div id="sim-left-family-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-card-field" style="display: none;">
@@ -420,6 +421,7 @@
                     <select id="sim-left-card" onchange="sim_calculateTotal('left')">
                         <option value="">カードを選択してください</option>
                     </select>
+                    <div id="sim-left-card-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-left-select-field" style="display: none;">
@@ -498,6 +500,7 @@
                     <select id="sim-right-use" onchange="sim_calculateTotal('right')">
                         <option value="">利用年数を選択してください</option>
                     </select>
+                    <div id="sim-right-use-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-family-field" style="display: none;">
@@ -505,6 +508,7 @@
                     <select id="sim-right-family" onchange="sim_calculateTotal('right')">
                         <option value="">家族割対象人数を選択してください</option>
                     </select>
+                    <div id="sim-right-family-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-card-field" style="display: none;">
@@ -512,6 +516,7 @@
                     <select id="sim-right-card" onchange="sim_calculateTotal('right')">
                         <option value="">カードを選択してください</option>
                     </select>
+                    <div id="sim-right-card-subtotal" class="sim-item-subtotal is-discount"></div>
                 </div>
 
                 <div class="sim-field" id="sim-right-select-field" style="display: none;">
@@ -1321,6 +1326,9 @@
             const strageSubtotal = document.getElementById(`sim-${side}-strage-subtotal`);
             const optionSubtotal = document.getElementById(`sim-${side}-option-subtotal`);
             const discountSubtotal = document.getElementById(`sim-${side}-discount-subtotal`);
+            const useSubtotal = document.getElementById(`sim-${side}-use-subtotal`);
+            const familySubtotal = document.getElementById(`sim-${side}-family-subtotal`);
+            const cardSubtotal = document.getElementById(`sim-${side}-card-subtotal`);
 
             // 💡 合計金額欄のタイトルを「選択した①携帯会社／②プラン名／③容量」の表記に変更する
             if (titleElement) {
@@ -1367,6 +1375,22 @@
             }
 
             // 💡 各項目の小計は、下の合計欄の入力状況に関わらず、選択した時点で常に表示する
+            // 💡 プルダウン選択後の割引金額を、ネット・でんきセット割などと同じように直下に表示する
+            if (useSubtotal) {
+                useSubtotal.textContent = (useSelect && useSelect.value)
+                    ? `小計：▲¥${parseInt(useSelect.value).toLocaleString()}`
+                    : "";
+            }
+            if (familySubtotal) {
+                familySubtotal.textContent = (familySelect && familySelect.value)
+                    ? `小計：▲¥${parseInt(familySelect.value).toLocaleString()}`
+                    : "";
+            }
+            if (cardSubtotal) {
+                cardSubtotal.textContent = (cardSelect && cardSelect.value)
+                    ? `小計：▲¥${parseInt(cardSelect.value).toLocaleString()}`
+                    : "";
+            }
             if (planSubtotal) {
                 planSubtotal.innerHTML = currentPlan
                     ? `<span class="sim-plan-subtotal-label">選択中：</span><span class="sim-plan-subtotal-value">${currentPlan.name}</span>`
