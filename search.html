@@ -3,7 +3,9 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>携帯プランかんたん検索</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>プラン検索</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     html,
     body {
@@ -17,210 +19,568 @@
     }
 
     body {
-      font-family: sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background: #f5f7fa;
-      color: #333;
+      padding: 20px 16px 40px;
     }
 
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      margin-bottom: 20px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    /* モード選択チェックボックス */
+    .mode-toggle {
+      padding: 10px 4px;
+      font-size: 1.02rem;
+      font-weight: 700;
     }
 
-    .flex {
+    /* 使用状況／条件指定 fieldset */
+    fieldset.mode-fieldset {
+      border: none;
+      padding: 16px;
+      margin: 0 0 16px 0;
+    }
+
+    fieldset.mode-fieldset:disabled {
+      opacity: 0.45;
+    }
+
+    fieldset.mode-fieldset legend {
+      padding: 0;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 12px;
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 6px;
+      width: 100%;
+    }
+
+    .usage-option {
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      background-color: #f8f9fa;
+    }
+
+    .usage-radio-label {
       display: flex;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .btn {
-      padding: 8px 15px;
-      border: 1px solid #ccc;
-      background: white;
-      border-radius: 4px;
+      align-items: center;
+      gap: 10px;
       cursor: pointer;
     }
 
-    .btn.active {
-      background: #007bff;
-      color: white;
-      border-color: #007bff;
+    .usage-radio-label input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      accent-color: var(--primary-color);
     }
 
-    .slider-group {
-      margin: 15px 0;
+    .usage-title {
+      font-weight: 700;
+      font-size: 1rem;
     }
 
-    .slider-group label {
+    .usage-desc {
+      margin: 6px 0 0 28px;
+      font-size: 0.85rem;
+      color: var(--text-sub);
+    }
+
+    .adv-field {
+      margin-bottom: 18px;
+    }
+
+    .adv-field>label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+      margin-bottom: 8px;
     }
 
-    input[type="range"] {
+    .carrier-checkbox-group,
+    .discount-checkbox-group {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .range-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .range-input-row span {
+      flex-shrink: 0;
+      color: var(--text-sub);
+    }
+
+    .btn-search-run {
       width: 100%;
-      max-width: 400px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    th,
-    td {
-      border-bottom: 1px solid #ddd;
       padding: 12px;
-      text-align: left;
+      background-color: var(--primary-color);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
     }
 
-    th {
-      background: #e9ecef;
+    /* 並び替えボタン */
+    .sort-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
+    .sort-btn {
+      padding: 7px 12px;
+      border: 1px solid var(--border-color);
+      background: #fff;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .sort-btn.active {
+      background: var(--primary-color);
+      color: #fff;
+      border-color: var(--primary-color);
+    }
+
+    /* 結果カード */
+    .result-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .result-card {
+      border: 1px solid var(--border-color);
+      border-left-width: 6px;
+      border-left-style: solid;
+      border-radius: 10px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.09);
+    }
+
+    .result-card-carrier {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+
+    .result-card-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .result-card-giga {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      margin-top: 2px;
+    }
+
+    .result-card-price {
+      margin-top: 8px;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .result-card-price .unit {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--text-sub);
+      margin-left: 2px;
+    }
+
+    .result-card-memo {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      padding-top: 8px;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .result-empty {
+      text-align: center;
+      color: #999;
+      padding: 30px 0;
+    }
+
+    @media (max-width: 380px) {
+
+      .carrier-checkbox-group,
+      .discount-checkbox-group {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <h1>📱 携帯プランカタログ & 検索</h1>
+  <div class="container">
+    <h1 class="veil-outer-title">プラン検索</h1>
 
-  <!-- 1. 選び方のコツ（簡易質問コーナー） -->
-  <div class="card">
-    <h3>💡 選び方のコツ（迷ったらタップ！）</h3>
-    <p>あなたの普段の使い方に近いものはどれですか？</p>
-    <div class="flex">
-      <button class="btn" onclick="applyGuide('low')">家にはWi-Fiがある（あまり外で使わない）</button>
-      <button class="btn" onclick="applyGuide('mid')">通勤・通学中にSNSや音楽を楽しみたい</button>
-      <button class="btn" onclick="applyGuide('high')">外でも動画やゲームをガンガン楽しみたい</button>
-    </div>
-  </div>
+    <!-- ===================== 検索 ===================== -->
+    <section id="search-area">
 
-  <!-- 2. スライダー・ソートコントロール -->
-  <div class="card">
-    <h3>🔍 条件で絞り込む</h3>
+      <div class="card">
+        <h2>検索方法を選択</h2>
+        <label class="checkbox-label mode-toggle">
+          <input type="checkbox" id="mode-usage" onchange="onModeToggle('usage')">
+          <span>使用状況から選ぶ</span>
+        </label>
+        <label class="checkbox-label mode-toggle">
+          <input type="checkbox" id="mode-advanced" onchange="onModeToggle('advanced')">
+          <span>条件を指定して選ぶ</span>
+        </label>
+      </div>
 
-    <div class="slider-group">
-      <label>必要データ容量: <span id="vol-val">20</span> GB 以上</label>
-      <input type="range" id="vol-slider" min="0" max="50" value="20" oninput="updateFilter()">
-    </div>
+      <fieldset id="fieldset-usage" class="card mode-fieldset" disabled>
+        <legend>使用状況から選ぶ</legend>
 
-    <div class="slider-group">
-      <label>月額料金の上限: <span id="price-val">4000</span> 円 以下</label>
-      <input type="range" id="price-slider" min="500" max="8000" step="500" value="4000" oninput="updateFilter()">
-    </div>
+        <div class="usage-option">
+          <label class="usage-radio-label">
+            <input type="radio" name="usage-preset" value="3" onchange="runUsageSearch('3')">
+            <span class="usage-title">3GB程度</span>
+          </label>
+          <p class="usage-desc">例：家にWi-Fiがあり、あまり外でスマホを使わない</p>
+        </div>
 
-    <div style="margin-top: 20px;">
-      <span>並び替え：</span>
-      <button class="btn active" id="sort-price" onclick="changeSort('price')">料金の安い順</button>
-      <button class="btn" id="sort-vol" onclick="changeSort('volume')">容量の多い順</button>
-    </div>
-  </div>
+        <div class="usage-option">
+          <label class="usage-radio-label">
+            <input type="radio" name="usage-preset" value="35" onchange="runUsageSearch('35')">
+            <span class="usage-title">35GB程度</span>
+          </label>
+          <p class="usage-desc">例：普段使いでSNSや動画もよく見る</p>
+        </div>
 
-  <!-- 3. 結果表示テーブル -->
-  <div class="card">
-    <h3>該当プラン一覧 (<span id="count">0</span>件)</h3>
-    <table>
-      <thead>
-        <tr>
-          <th>キャリア</th>
-          <th>プラン名</th>
-          <th>容量 (GB)</th>
-          <th>月額料金 (税込)</th>
-        </tr>
-      </thead>
-      <tbody id="plan-list">
-        <!-- JSでここに挿入 -->
-      </tbody>
-    </table>
+        <div class="usage-option">
+          <label class="usage-radio-label">
+            <input type="radio" name="usage-preset" value="35plus" onchange="runUsageSearch('35plus')">
+            <span class="usage-title">35GB以上（無制限も含む）</span>
+          </label>
+          <p class="usage-desc">例：自宅のネット回線代わりに大量に使う</p>
+        </div>
+      </fieldset>
+
+      <fieldset id="fieldset-advanced" class="card mode-fieldset" disabled>
+        <legend>条件を指定して選ぶ</legend>
+
+        <div class="adv-field">
+          <label>キャリア（複数選択可）</label>
+          <div class="checkbox-group carrier-checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="docomo"><span>ドコモ</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="au"><span>au</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="UQ"><span>UQ mobile</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="softbank"><span>softbank</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="Ymobile"><span>Y! mobile</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="carrier-cb" value="Rakuten"><span>Rakuten</span></label>
+          </div>
+        </div>
+
+        <div class="adv-field">
+          <label>容量（GB）</label>
+          <div class="range-input-row">
+            <input type="number" id="adv-gb-min" min="0" placeholder="下限">
+            <span>〜</span>
+            <input type="number" id="adv-gb-max" min="0" placeholder="上限">
+          </div>
+        </div>
+
+        <div class="adv-field">
+          <label>月額（円）</label>
+          <div class="range-input-row">
+            <input type="number" id="adv-price-min" min="0" placeholder="下限">
+            <span>〜</span>
+            <input type="number" id="adv-price-max" min="0" placeholder="上限">
+          </div>
+        </div>
+
+        <div class="adv-field">
+          <label>割引（チェックした条件を全て満たすプランに絞り込み）</label>
+          <div class="checkbox-group discount-checkbox-group">
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="family"><span>家族割があるか</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="net"><span>ネット回線の割引があるか</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="card"><span>支払いカードの割引があるか</span></label>
+            <label class="checkbox-label"><input type="checkbox" class="discount-cb" value="ele"><span>でんきの割引があるか</span></label>
+          </div>
+        </div>
+
+        <button type="button" class="btn-search-run" onclick="runAdvancedSearch()">この条件で検索する</button>
+      </fieldset>
+    </section>
+
+    <!-- ===================== 検索結果 ===================== -->
+    <section id="result-area">
+      <div class="card">
+        <h2>検索結果（<span id="result-count">0</span>件）</h2>
+        <div class="sort-btn-row">
+          <button type="button" class="sort-btn active" data-sort="price-asc" onclick="changeSort('price-asc')">料金の安い順</button>
+          <button type="button" class="sort-btn" data-sort="price-desc" onclick="changeSort('price-desc')">料金の高い順</button>
+          <button type="button" class="sort-btn" data-sort="gb-asc" onclick="changeSort('gb-asc')">容量の少ない順</button>
+          <button type="button" class="sort-btn" data-sort="gb-desc" onclick="changeSort('gb-desc')">容量の多い順</button>
+        </div>
+        <div id="result-list" class="result-card-list"></div>
+      </div>
+    </section>
+
   </div>
 
   <script>
-    // プランのマスターデータ
-    const masterPlans = [
-      { brand: "IIJmio", name: "ギガプラン 5ギガ", volume: 5, price: 990 },
-      { brand: "IIJmio", name: "ギガプラン 20ギガ", volume: 20, price: 2000 },
-      { brand: "ahamo", name: "ahamo", volume: 30, price: 2970 },
-      { brand: "LINEMO", name: "ベストプラン", volume: 10, price: 2090 },
-      { brand: "povo2.0", name: "データ追加20GB(30日)", volume: 20, price: 2700 },
-      { brand: "UQモバイル", name: "コミコミプラン", volume: 20, price: 3278 },
-      { brand: "ワイモバイル", name: "シンプル2 M", volume: 20, price: 4015 },
-      { brand: "楽天モバイル", name: "最強プラン(〜3GB)", volume: 3, price: 1078 },
-      { brand: "楽天モバイル", name: "最強プラン(無制限)", volume: 50, price: 3278 } // 無制限は便宜上50GBとして登録
-    ];
+    // 📱 プランのマスターデータ（carrierdata.xlsx より確定値をハードコード）
+    // discounts: family=家族割, net=ネット割, card=カード割, ele=でんき割 （true=〇 / false=×）
+    const planData = {
+      docomo: [
+        { name: "ドコモMAX", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "~1GB", price: 5698 }, { giga: "1~3GB", price: 6798 }, { giga: "3GB~", price: 8004 }] },
+        { name: "ポイ活MAX", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "無制限", price: 11748 }] },
+        { name: "ポイ活20", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "~20GB", price: 7898 }, { giga: "20GB~", price: 9750 }] },
+        { name: "ドコモmini", discounts: { family: false, net: true, card: true, ele: true },
+          strages: [{ giga: "4GB", price: 2750 }, { giga: "10GB", price: 3850 }] },
+        { name: "ahamo", discounts: { family: false, net: false, card: false, ele: false },
+          strages: [{ giga: "30GB", price: 2970 }, { giga: "110GB", price: 4950 }] },
+      ],
+      au: [
+        { name: "バリューリンクプラン", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "~1GB", price: 6358 }, { giga: "1GB~", price: 8008 }] },
+        { name: "バリューリンク マネ活2", discounts: { family: false, net: true, card: false, ele: false },
+          strages: [{ giga: "無制限", price: 9328 }] },
+        { name: "使い放題MAX+", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "~1GB", price: 6138 }, { giga: "1GB~", price: 7788 }] },
+        { name: "使い放題MAX+ マネ活2", discounts: { family: false, net: true, card: false, ele: false },
+          strages: [{ giga: "無制限", price: 9108 }] },
+        { name: "スマホミニプラン+", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "~1GB", price: 4928 }, { giga: "1~3GB", price: 6578 }, { giga: "3~5GB", price: 8228 }] },
+      ],
+      UQ: [
+        { name: "コミコミプランバリュー", discounts: { family: false, net: false, card: false, ele: false },
+          strages: [{ giga: "35GB", price: 3828 }] },
+        { name: "トクトクプラン2", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "~5GB", price: 2948 }, { giga: "5~30GB", price: 4048 }] },
+      ],
+      softbank: [
+        { name: "ペイトク2", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "無制限", price: 10538 }] },
+        { name: "テイガク無制限", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "無制限", price: 8008 }] },
+        { name: "ミニフィット2", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "~2GB", price: 5258 }, { giga: "2~5GB", price: 6358 }] },
+      ],
+      Ymobile: [
+        { name: "シンプル3 S", discounts: { family: true, net: true, card: true, ele: false },
+          strages: [{ giga: "5GB", price: 3278 }] },
+        { name: "シンプル3 M", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "30GB", price: 4378 }] },
+        { name: "シンプル3 L", discounts: { family: true, net: true, card: true, ele: true },
+          strages: [{ giga: "35GB", price: 5478 }] },
+      ],
+      Rakuten: [
+        { name: "最強プラン", discounts: { family: true, net: false, card: false, ele: false },
+          strages: [{ giga: "~3GB", price: 1078 }, { giga: "3~20GB", price: 2178 }, { giga: "20GB~", price: 3278 }] },
+      ],
+    };
 
-    let currentSort = 'price'; // 'price' or 'volume'
+    const carrierLabels = { docomo: "ドコモ", au: "au", UQ: "UQ mobile", softbank: "softbank", Ymobile: "Y! mobile", Rakuten: "Rakuten" };
 
-    // 選び方のコツ（ボタン）を押した時の処理
-    function applyGuide(type) {
-      const volSlider = document.getElementById('vol-slider');
-      const priceSlider = document.getElementById('price-slider');
+    // キャリアごとの基準色相（色相環上の角度）。同キャリア内のプランはこの色相を保ったまま明度を変えて塗り分ける
+    const carrierHue = { docomo: 350, au: 28, UQ: 200, softbank: 46, Ymobile: 322, Rakuten: 265 };
 
-      if (type === 'low') {
-        volSlider.value = 3;
-        priceSlider.value = 1500;
-      } else if (type === 'mid') {
-        volSlider.value = 15;
-        priceSlider.value = 3000;
-      } else if (type === 'high') {
-        volSlider.value = 30;
-        priceSlider.value = 5000;
-      }
-      updateFilter();
+    // carrier(色相) × planIndex(明度) の組み合わせでプランごとに一意な配色を作る
+    function buildPlanColor(carrier, planIndex) {
+      const hue = carrierHue[carrier];
+      const lightness = Math.min(70, 38 + planIndex * 9);
+      const bgLightness = Math.max(92, 97 - planIndex * 1.4);
+      return {
+        accent: `hsl(${hue}, 68%, ${lightness}%)`,
+        bg: `hsl(${hue}, 55%, ${bgLightness}%)`,
+        badgeBg: `hsl(${hue}, 60%, 91%)`,
+        badgeText: `hsl(${hue}, 65%, 30%)`,
+        priceText: `hsl(${hue}, 65%, 32%)`,
+      };
     }
 
-    // ソート順の変更
-    function changeSort(type) {
-      currentSort = type;
-      document.getElementById('sort-price').classList.toggle('active', type === 'price');
-      document.getElementById('sort-vol').classList.toggle('active', type === 'volume');
-      updateFilter();
+    const LARGE_GB_SENTINEL = 999999; // 無制限 / open-high側の代表最大値
+
+    // giga文字列 → { min, max } のGB範囲にパースする
+    function parseGiga(giga) {
+      if (giga === "無制限") return { min: 0, max: LARGE_GB_SENTINEL };
+      let m = giga.match(/^(\d+)~(\d+)GB$/);   // "N~MGB"
+      if (m) return { min: Number(m[1]), max: Number(m[2]) };
+      m = giga.match(/^(\d+)GB~$/);            // "NGB~"
+      if (m) return { min: Number(m[1]), max: LARGE_GB_SENTINEL };
+      m = giga.match(/^~(\d+)GB$/);            // "~NGB"
+      if (m) return { min: 0, max: Number(m[1]) };
+      m = giga.match(/^(\d+)GB$/);             // "NGB"
+      if (m) return { min: Number(m[1]), max: Number(m[1]) };
+      return { min: 0, max: 0 };
     }
 
-    // フィルター＆描画のコア処理
-    function updateFilter() {
-      const targetVol = parseInt(document.getElementById('vol-slider').value);
-      const targetPrice = parseInt(document.getElementById('price-slider').value);
+    // 割引フラグだけから機械的にmemoを生成する
+    function buildMemo(discounts) {
+      const labels = [];
+      if (discounts.family) labels.push("家族割");
+      if (discounts.net) labels.push("ネット割");
+      if (discounts.card) labels.push("カード割");
+      if (discounts.ele) labels.push("でんき割");
+      return labels.length > 0 ? `${labels.join("・")} 対象` : "対象の割引なし";
+    }
 
-      // 数値表示の更新
-      document.getElementById('vol-val').textContent = targetVol === 50 ? "50(無制限含む)" : targetVol;
-      document.getElementById('price-val').textContent = targetPrice;
-
-      // 絞り込み
-      let filtered = masterPlans.filter(plan => plan.volume >= targetVol && plan.price <= targetPrice);
-
-      // 並び替え
-      if (currentSort === 'price') {
-        filtered.sort((a, b) => a.price - b.price);
-      } else {
-        filtered.sort((a, b) => b.volume - a.volume);
-      }
-
-      // HTMLへの出力
-      const tbody = document.getElementById('plan-list');
-      tbody.innerHTML = "";
-      document.getElementById('count').textContent = filtered.length;
-
-      filtered.forEach(plan => {
-        const row = `<tr>
-          <td><strong>${plan.brand}</strong></td>
-          <td>${plan.name}</td>
-          <td>${plan.volume === 50 ? '無制限' : plan.volume + ' GB'}</td>
-          <td>${plan.price.toLocaleString()} 円</td>
-        </tr>`;
-        tbody.insertAdjacentHTML('beforeend', row);
+    // 全プラン×全tierをフラットな検索結果エントリ配列に展開する
+    function buildFlatEntries() {
+      const entries = [];
+      Object.keys(planData).forEach(carrier => {
+        planData[carrier].forEach((plan, planIndex) => {
+          const color = buildPlanColor(carrier, planIndex);
+          plan.strages.forEach(tier => {
+            const range = parseGiga(tier.giga);
+            entries.push({
+              carrier,
+              carrierLabel: carrierLabels[carrier],
+              planName: plan.name,
+              giga: tier.giga,
+              gbMin: range.min,
+              gbMax: range.max,
+              price: tier.price,
+              discounts: plan.discounts,
+              memo: buildMemo(plan.discounts),
+              color,
+            });
+          });
+        });
       });
+      return entries;
     }
 
-    // 初期起動時に実行
-    updateFilter();
+    const allEntries = buildFlatEntries();
+
+    let currentResults = [];
+    let currentSortKey = 'price-asc';
+    let hasSearched = false;
+
+    // 検索結果カードへスムーズにスクロールする
+    function scrollToResults() {
+      document.getElementById('result-area').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // 「使用状況から選ぶ」「条件を指定して選ぶ」の排他制御
+    function onModeToggle(which) {
+      const usageCb = document.getElementById('mode-usage');
+      const advCb = document.getElementById('mode-advanced');
+
+      if (which === 'usage' && usageCb.checked) {
+        advCb.checked = false;
+      } else if (which === 'advanced' && advCb.checked) {
+        usageCb.checked = false;
+      }
+      document.getElementById('fieldset-usage').disabled = !usageCb.checked;
+      document.getElementById('fieldset-advanced').disabled = !advCb.checked;
+    }
+
+    // 使用状況からの簡易検索
+    function runUsageSearch(preset) {
+      let filtered;
+      if (preset === '35plus') {
+        filtered = allEntries.filter(e => e.gbMax >= 35);
+      } else {
+        const t = Number(preset);
+        filtered = allEntries.filter(e => e.gbMin <= t && t <= e.gbMax);
+      }
+      hasSearched = true;
+      currentResults = sortEntries(filtered, currentSortKey);
+      renderResults();
+      scrollToResults();
+    }
+
+    function parseNumOrNull(id) {
+      const v = document.getElementById(id).value;
+      return v === '' ? null : Number(v);
+    }
+
+    // 条件を指定しての詳細検索
+    function runAdvancedSearch() {
+      const selectedCarriers = [...document.querySelectorAll('.carrier-cb:checked')].map(cb => cb.value);
+      const gbMin = parseNumOrNull('adv-gb-min');
+      const gbMax = parseNumOrNull('adv-gb-max');
+      const priceMin = parseNumOrNull('adv-price-min');
+      const priceMax = parseNumOrNull('adv-price-max');
+      const requiredDiscounts = [...document.querySelectorAll('.discount-cb:checked')].map(cb => cb.value);
+
+      const filtered = allEntries.filter(e => {
+        if (selectedCarriers.length > 0 && !selectedCarriers.includes(e.carrier)) return false;
+        if (gbMin !== null && e.gbMax < gbMin) return false;
+        if (gbMax !== null && e.gbMin > gbMax) return false;
+        if (priceMin !== null && e.price < priceMin) return false;
+        if (priceMax !== null && e.price > priceMax) return false;
+        for (const key of requiredDiscounts) {
+          if (!e.discounts[key]) return false;
+        }
+        return true;
+      });
+
+      hasSearched = true;
+      currentResults = sortEntries(filtered, currentSortKey);
+      renderResults();
+      scrollToResults();
+    }
+
+    function sortEntries(list, key) {
+      const copy = [...list];
+      switch (key) {
+        case 'price-asc': copy.sort((a, b) => a.price - b.price); break;
+        case 'price-desc': copy.sort((a, b) => b.price - a.price); break;
+        case 'gb-asc': copy.sort((a, b) => a.gbMax - b.gbMax); break;
+        case 'gb-desc': copy.sort((a, b) => b.gbMax - a.gbMax); break;
+      }
+      return copy;
+    }
+
+    function changeSort(key) {
+      currentSortKey = key;
+      document.querySelectorAll('.sort-btn').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.sort === key));
+      currentResults = sortEntries(currentResults, key);
+      renderResults();
+    }
+
+    function renderResults() {
+      const list = document.getElementById('result-list');
+      document.getElementById('result-count').textContent = currentResults.length;
+
+      if (!hasSearched) {
+        list.innerHTML = '<p class="result-empty">「使用状況から選ぶ」または「条件を指定して選ぶ」で検索すると、ここに結果が表示されます</p>';
+        return;
+      }
+
+      if (currentResults.length === 0) {
+        list.innerHTML = '<p class="result-empty">条件に合うプランが見つかりませんでした</p>';
+        return;
+      }
+
+      list.innerHTML = currentResults.map(e => `
+        <div class="result-card" style="border-left-color:${e.color.accent}; background:${e.color.bg};">
+          <span class="result-card-carrier" style="background:${e.color.badgeBg}; color:${e.color.badgeText};">${e.carrierLabel}</span>
+          <div class="result-card-name">${e.planName}</div>
+          <div class="result-card-giga">${e.giga}</div>
+          <div class="result-card-price" style="color:${e.color.priceText};">${e.price.toLocaleString()}円<span class="unit">/月</span></div>
+          <div class="result-card-memo">${e.memo}</div>
+        </div>
+      `).join('');
+    }
+
+    // 初期起動時
+    renderResults();
   </script>
 </body>
 
