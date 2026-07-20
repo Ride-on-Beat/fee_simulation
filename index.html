@@ -623,7 +623,10 @@
     bottom: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 60px !important;
+    /* 💡 standalone起動時はsafe-area-inset-bottomが0より大きくなり、
+          固定60pxの中でpaddingとアイコン表示領域を取り合ってアイコンが
+          はみ出してしまうため、safe-area分を高さに加算して確保する */
+    height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
     background-color: #7a99cf !important;
     border-top: 1px solid #e0e0e0 !important;
     display: flex !important;
@@ -631,7 +634,7 @@
     align-items: center !important;
     z-index: 1000 !important;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
-    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
   }
 
   .footer-tab {
@@ -1265,6 +1268,15 @@
       //     スクロールエリアの高さを再計算すると、スクロールする度に範囲が変化してしまう
       //     不安定な状態（スクロールしてもしても終わらないように見える不具合）の原因になっていた。
     }
+    // 💡 ホーム画面のアプリを閉じて再度開いた際、iOSがフルリロードせず一時停止状態から
+    //     そのまま復元するだけのことがあり、その場合load/resizeが発火せず古いフッター位置の
+    //     まま残ってしまうため、pageshowとvisibilitychange(表示復帰時)でも測り直す
+    window.addEventListener('pageshow', syncFooterToVisualViewport);
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible') {
+        syncFooterToVisualViewport();
+      }
+    });
 
     // ページを開いた瞬間の時間を記録
     const startTime = Date.now();
