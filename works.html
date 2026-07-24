@@ -504,6 +504,237 @@
 .link-list a:hover{
     text-decoration:underline;
 }
+  .cu-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 6px;
+    margin-bottom: 15px;
+  }
+
+  .cu-header-row h2 {
+    border-bottom: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .cu-note {
+    font-size: 0.8rem;
+    color: #888;
+    margin: -6px 0 8px;
+    line-height: 1.6;
+  }
+
+  .cu-caution {
+    font-size: 0.78rem;
+    color: #856404;
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin: 0 0 18px;
+    line-height: 1.5;
+  }
+
+  /* ===== モード選択（search.html の検索方法選択を踏襲） ===== */
+  .cu-mode-select {
+    margin-bottom: 6px;
+  }
+
+  .cu-mode-toggle {
+    padding: 10px 4px;
+    font-size: 1.02rem;
+    font-weight: 700;
+  }
+
+  fieldset.cu-mode-fieldset {
+    border: none;
+    padding: 16px 0 0;
+    margin: 0;
+  }
+
+  fieldset.cu-mode-fieldset[disabled] {
+    display: none;
+  }
+
+  /* ===== 結果表示共通 ===== */
+  .cu-result-empty {
+    padding: 28px 12px;
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border: 1px dashed var(--border-color);
+  }
+
+  .cu-result-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .cu-model-name {
+    color: var(--primary-color);
+  }
+
+  /* ===== OS・メーカーの色分けバッジ（共通） ===== */
+  .cu-os-badge {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    background: var(--cu-os-color, #616161);
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .cu-maker-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 4px;
+    background: #fff;
+    border: 1.3px solid var(--cu-maker-color, #868e96);
+    color: var(--cu-maker-color, #868e96);
+    flex-shrink: 0;
+  }
+
+  .cu-count-badge {
+    display: inline-block;
+    background: var(--accent-divide);
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 2px 9px;
+    border-radius: 999px;
+  }
+
+  /* ===== モード1：機種からキャリアを探す ===== */
+  .cu-chip-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .cu-chip {
+    --cu-accent: var(--primary-color);
+    --cu-bg: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    background: var(--cu-bg);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--cu-accent);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+
+  .cu-chip-badge {
+    display: inline-block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1.5px solid var(--cu-accent);
+    color: var(--cu-accent);
+  }
+
+  .cu-chip-link {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    white-space: nowrap;
+    background: #fff;
+    border: 1.5px solid var(--cu-accent);
+    color: var(--cu-accent);
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+
+  .cu-chip-link:hover {
+    background: var(--cu-accent);
+    color: #fff;
+  }
+
+  /* ===== モード2：キャリアから機種を探す ===== */
+  .cu-keyword-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    font-size: 0.9rem;
+    background-color: #fff;
+    outline: none;
+    box-sizing: border-box;
+  }
+
+  .cu-keyword-input:focus {
+    border-color: var(--primary-color);
+  }
+
+  .cu-carrier-summary {
+    --cu-accent: var(--primary-color);
+    --cu-bg: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    background: var(--cu-bg);
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--cu-accent);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+
+  .cu-carrier-summary-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--cu-accent);
+  }
+
+  .cu-device-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    max-height: 440px;
+    overflow-y: auto;
+    padding-right: 2px;
+  }
+
+  .cu-device-row {
+    --cu-accent: var(--primary-color);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: #f8f9fa;
+    border: 1px solid var(--border-color);
+    border-left: 3px solid var(--cu-accent);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+
+  .cu-device-model {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #212529;
+  }
 </style>
 </head>
 <body>
@@ -513,6 +744,7 @@
         <ol>
             <li><a href="#dv-checker">smartあんしん補償月額検索</a></li>
             <li><a href="#link-list">リンク集</a></li>
+            <li><a href="#carrier-search">対応キャリア検索</a></li>
             <li><a href="#h5g-simulator">home 5G 月額シミュレーター</a></li>
             <li><a href="#dpoint-search">dポイント還元検索</a></li>
         </ol>
@@ -661,6 +893,90 @@
         </li>
     </ul>
     </div>
+  <div class="card" id="carrier-search">
+    <div class="cu-header-row">
+      <h2>対応キャリア検索</h2>
+      <button type="button" class="btn-reset" onclick="cu_reset()"><span class="btn-reset-icon">🔄</span> リセット</button>
+    </div>
+    <p class="cu-note">
+      機種とキャリア、どちらを起点にも検索できます。<br>
+      対象キャリア：docomo / au / UQ mobile / softbank / Y!mobile / Rakuten（ahamo対応端末ページの情報をもとに作成）
+    </p>
+    <p class="cu-caution">※ 記載のない端末については、各メーカーのホームページをご覧ください。</p>
+
+    <div class="card cu-mode-select">
+      <label class="checkbox-label cu-mode-toggle">
+        <input type="checkbox" id="cu-mode-device" checked onchange="cu_onModeToggle('device')">
+        <span>機種からキャリアを探す</span>
+      </label>
+      <label class="checkbox-label cu-mode-toggle">
+        <input type="checkbox" id="cu-mode-carrier" onchange="cu_onModeToggle('carrier')">
+        <span>キャリアから機種を探す</span>
+      </label>
+    </div>
+
+    <!-- ===== モード1：機種からキャリアを探す ===== -->
+    <fieldset id="cu-fieldset-device" class="cu-mode-fieldset">
+
+      <div class="section">
+        <label for="cu-os">OS</label>
+        <select id="cu-os" onchange="cu_updateMaker()">
+          <option value="">選択してください</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label for="cu-maker">メーカー</label>
+        <select id="cu-maker" onchange="cu_updateSeries()" disabled>
+          <option value="">選択してください</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label for="cu-series">シリーズ</label>
+        <select id="cu-series" onchange="cu_updateModel()" disabled>
+          <option value="">選択してください</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label for="cu-keyword">機種名・メーカーで絞り込み</label>
+        <input type="text" id="cu-keyword" class="cu-keyword-input" placeholder="例：Galaxy、AQUOS など" oninput="cu_filterModel()" disabled>
+      </div>
+
+      <div class="section">
+        <label for="cu-model">機種名</label>
+        <select id="cu-model" onchange="cu_showResult()" disabled>
+          <option value="">選択してください</option>
+        </select>
+      </div>
+
+      <div id="cu-result"></div>
+    </fieldset>
+
+    <!-- ===== モード2：キャリアから機種を探す ===== -->
+    <fieldset id="cu-fieldset-carrier" class="cu-mode-fieldset" disabled>
+
+      <div class="section">
+        <label for="cu2-carrier">キャリア</label>
+        <select id="cu2-carrier" onchange="cu2_updateResult()">
+          <option value="">選択してください</option>
+        </select>
+      </div>
+
+      <div class="section">
+        <label for="cu2-os">OS</label>
+        <select id="cu2-os" onchange="cu2_updateResult()">
+          <option value="">すべて</option>
+          <option value="iOS">iOS</option>
+          <option value="Android">Android</option>
+        </select>
+      </div>
+
+      <div id="cu2-result"></div>
+    </fieldset>
+
+  </div>
 
     <div class="card" id="h5g-simulator">
         <h2>home 5G 月額シミュレーター</h2>
@@ -1316,6 +1632,278 @@
     dpointUpdateYearAvailability();
     dpointUpdateMobileFeeAvailability();
     ["mobile", "hikari", "denki", "gas"].forEach(dpointToggleSection);
+  const carrierData = {"iOS":{"Apple":{"iPhone":{"iPhone 11":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 11 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 11 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 12":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 12 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 12 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 12 mini":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 13":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 13 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 13 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 13 mini":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 14":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 14 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 14 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 14 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 15":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 15 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 15 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 15 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 16":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 16 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 16 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 16 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 16e":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 17":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 17 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 17 Pro Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 17e":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 7":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 7 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone 8 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone Air":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone SE":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone X":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone XR":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone XS":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"iPhone XS Max":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}}},"Android":{"Google":{"Pixel":{"Google Pixel 10":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 10 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 10 Pro Fold":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 10 Pro XL":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 10a":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Google Pixel 3 XL":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Google Pixel 3a":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 5":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Google Pixel 5a":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 6":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 6 Pro":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 6a":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 7":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 7 Pro":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 7a":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 8 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Google Pixel 8a":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 9 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 9 Pro Fold":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 9 Pro XL":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel 9a":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Google Pixel Fold":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"Samsung":{"Galaxy":{"Galaxy A20":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A21":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A22 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A23 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy A25 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy A30":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy A32 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A36 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy A41":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A51 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy A52 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy A53 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy A54 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy A55 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy A57 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Galaxy Feel":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Galaxy Feel2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Galaxy Fold":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy Note10+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Note20 Ultra 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Note8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy Note9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S10":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy S10+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy S20 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S20 Ultra 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S20+ 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S21 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S21 Ultra 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S21+ 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy S22":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S22 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S23":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy S23 FE":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy S23 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S24":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S24 FE":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy S24 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S25":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S25 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy S26":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy S26 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy S26+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy S7 edge":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S8+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy S9+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Galaxy Z Flip":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Z Flip 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Z Flip3 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Z Flip4":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Galaxy Z Flip5":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Flip6":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Flip7":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Flip8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Galaxy Z Fold2 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Z Fold3 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Galaxy Z Fold4":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Fold5":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Fold6":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Fold7":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Galaxy Z Fold8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Galaxy Z Fold8 Ultra":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}]}},"Sony":{"Xperia":{"Xperia 1":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 1 II":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Xperia 1 III":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 1 IV":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 1 V":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 1 VI":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 1 VII":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 1 VIII":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia 10 II":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Xperia 10 III":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 10 IV":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 10 V":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 10 VI":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 10 VII":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 5":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 5 II":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia 5 III":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 5 IV":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 5 V":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia 8":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}],"Xperia Ace":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia Ace II":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia Ace III":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Xperia PRO-I":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"Xperia X Compact":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Xperia X Performance":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZ":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZ Premium":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Xperia XZ1":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZ1 Compact":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Xperia XZ2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZ2 Compact":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"Xperia XZ2 Premium":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZ3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Xperia XZs":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}]}},"SHARP":{"AQUOS":{"AQUOS EVER":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"AQUOS R":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"AQUOS R compact":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"AQUOS R10":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS R11":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"AQUOS R2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"AQUOS R2 compact":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS R3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS R5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS R6":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS R7":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS R8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS R8 pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS R9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS R9 pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS ZETA":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"AQUOS sense":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"AQUOS sense10":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS sense2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"AQUOS sense3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense3 Plus サウンド":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense3 basic":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense3 lite":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense4":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense4 Plus":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense4 basic":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense4 lite":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS sense5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS sense6":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS sense6s":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS sense7":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS sense8":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS sense9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS wish":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS wish2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS wish3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS wish4":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS wish5":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS zero":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS zero2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"AQUOS zero5G basic":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"AQUOS zero5G basic DX":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"AQUOS zero6":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"FCNT":{"arrows":{"arrows 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows Alpha":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"arrows Be":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"arrows Be3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows Be4":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows Be4 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows J":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows M05":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"arrows N":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"arrows NX":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"arrows NX9":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"arrows SV":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"arrows We":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"arrows We2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"arrows We2 Plus":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"arrows We3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"Motorola":{"razr":{"motorola edge 60":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}],"motorola razr 50d":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"motorola razr 50s":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"motorola razr 5G":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"motorola razr 60 ultra":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"motorola razr 60d":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"motorola razr 60s":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]}},"HUAWEI":{"P":{"HUAWEI P30 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"HUAWEI P20 Pro":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"HUAWEI P30 lite Premium":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"HUAWEI P30 lite":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"HUAWEI P20":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]},"Mate":{"HUAWEI Mate 20 Pro":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"HUAWEI Mate 10 Pro":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]},"nova":{"HUAWEI nova lite 3":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}],"HUAWEI nova 5T":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"HUAWEI nova 3":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"LG":{"VELVET":{"LG VELVET":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}]},"V":{"LG V60 ThinQ 5G":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"LG V30+":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}]},"style":{"LG style3":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"LG style2":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"LG style":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}]},"K":{"LG K50":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]},"G":{"LG G8X ThinQ":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]},"Q":{"LG Q stylus":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"OPPO":{"Find X":{"OPPO Find X9":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"OPPO Find X3 Pro":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"OPPO Find X2 Pro":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}]},"A":{"OPPO A5 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO A54 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"OPPO A55s 5G":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO A5 2020":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO A3 5G":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"OPPO A79 5G":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO A73":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]},"Reno":{"OPPO Reno13A":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno10 Pro 5G":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"OPPO Reno3 5G":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"OPPO Reno7 A":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno3 A":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno11 A":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno9 A":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno5 A":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"},{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"OPPO Reno A":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"ZTE Corporation":{"ZTE":{"M Z-01K":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}],"ZTE a1":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"あんしんファミリースマホ":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"すみっコぐらしスマホ":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"ZTE Axon 10 Pro 5G":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"ZTE BLADE E02":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]},"Libero":{"Libero3":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Libero Flip":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Libero 5G IV":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Libero 5G III":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Libero 5G Ⅱ":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Libero 5G":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Libero S10":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]}},"京セラ":{"DuraForce":{"DuraForce EX":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]},"あんしんスマホ":{"あんしんスマホ":[{"c":"docomo","u":"https://www.docomo.ne.jp/service/spmode/compatible_model/"}]},"TORQUE":{"TORQUE G06":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"TORQUE 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"TORQUE G04":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}]},"GRATINA":{"GRATINA":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}]},"BASIO":{"BASIO4":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}]},"DIGNO":{"DIGNO J":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"DIGNO G":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]},"らくらくスマートフォン":{"らくらくスマートフォン a":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]},"かんたんスマホ":{"かんたんスマホ 3":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"かんたんスマホ2＋":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"かんたんスマホ2":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]},"Android One":{"Android One S10":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One S9":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One S8":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One X3":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One S6":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One S4":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Android One S2":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]}},"Xiaomi":{"Xiaomi":{"Xiaomi 14T":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}],"Xiaomi 14T Pro":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Xiaomi 13T Pro":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Xiaomi 12T Pro":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Xiaomi 13T":[{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}]},"Redmi":{"Redmi Note 13 Pro 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"}],"Redmi 12 5G":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"},{"c":"UQ mobile","u":"https://www.uqwimax.jp/mobile/products/sim/devices/"},{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Redmi Note 10 JE":[{"c":"au","u":"https://www.au.com/mobile/product/sim/devices/"}],"Redmi Note 10T":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Redmi Note 9T":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}],"Redmi 9T":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}],"Redmi Note 11 Pro 5G":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"BALMUDA":{"BALMUDA Phone":{"BALMUDA Phone":[{"c":"softbank","u":"https://www.softbank.jp/mobile/products/sim/usim-card-device/"}]}},"HTC":{"Android One":{"Android One X2":[{"c":"Y!mobile","u":"https://www.ymobile.jp/store/lineup/sim_devices/"}]},"U":{"HTC U12+":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"HTC U11 life":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"ASUS":{"ZenFone":{"ZenFone Max Plus (M1)":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}],"ZenFone 5":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}},"Essential Products":{"Essential Phone":{"Essential Phone":[{"c":"Rakuten","u":"https://network.mobile.rakuten.co.jp/product/certified-products/"}]}}}};
+
+  // search.html / age.html のキャリアカラーを踏襲
+  const CARRIER_COLORS = {
+    'docomo':    { accent: '#ff0000', bg: '#fff2f1' },
+    'au':        { accent: '#f57c00', bg: '#fff3e6' },
+    'UQ mobile': { accent: '#7b1fa2', bg: '#f3e8fb' },
+    'softbank':  { accent: '#9e9e9e', bg: '#f5f5f5' },
+    'Y!mobile':  { accent: '#ff3d3f', bg: '#fff6ef' },
+    'Rakuten':   { accent: '#ff00a7', bg: '#ffe9ef' }
+  };
+
+  const CARRIER_LINKS = {
+    'docomo': 'https://www.docomo.ne.jp/service/spmode/compatible_model/',
+    'au': 'https://www.au.com/mobile/product/sim/devices/',
+    'UQ mobile': 'https://www.uqwimax.jp/mobile/products/sim/devices/',
+    'softbank': 'https://www.softbank.jp/mobile/products/sim/usim-card-device/',
+    'Y!mobile': 'https://www.ymobile.jp/store/lineup/sim_devices/',
+    'Rakuten': 'https://network.mobile.rakuten.co.jp/product/certified-products/'
+  };
+
+  const CARRIER_ORDER = ['docomo', 'au', 'UQ mobile', 'softbank', 'Y!mobile', 'Rakuten'];
+
+  // OS・メーカーごとの識別カラー（メーカーは色相を均等割りして自動生成）
+  const OS_COLORS = {"iOS":"#424242","Android":"#2e7d32"};
+  const MAKER_COLORS = {"Apple":"#ae2929","Google":"#29ae4f","Samsung":"#7629ae","Sony":"#ae9d29","SHARP":"#2997ae","FCNT":"#ae2971","Motorola":"#4aae29","HUAWEI":"#2e29ae","LG":"#ae5529","OPPO":"#29ae7c","ZTE Corporation":"#a329ae","京セラ":"#92ae29","Xiaomi":"#296bae","BALMUDA":"#ae2944","HTC":"#29ae34","ASUS":"#5b29ae","Essential Products":"#ae8229"};
+
+  function cu_colorOf(carrierName) {
+    return CARRIER_COLORS[carrierName] || { accent: '#e31837', bg: '#f8f9fa' };
+  }
+
+  function cu_osBadgeHTML(os) {
+    const color = OS_COLORS[os] || '#616161';
+    return '<span class="cu-os-badge" style="--cu-os-color:' + color + ';">' + os + '</span>';
+  }
+
+  function cu_makerBadgeHTML(maker) {
+    const color = MAKER_COLORS[maker] || '#868e96';
+    return '<span class="cu-maker-badge" style="--cu-maker-color:' + color + ';">' + maker + '</span>';
+  }
+
+  /* ---------- モード切替 ---------- */
+  function cu_onModeToggle(which) {
+    const deviceCb = document.getElementById('cu-mode-device');
+    const carrierCb = document.getElementById('cu-mode-carrier');
+
+    if (which === 'device' && deviceCb.checked) {
+      carrierCb.checked = false;
+    } else if (which === 'carrier' && carrierCb.checked) {
+      deviceCb.checked = false;
+    }
+    // どちらもオフにはしない（最低どちらか一方は選択状態を保つ）
+    if (!deviceCb.checked && !carrierCb.checked) {
+      if (which === 'device') carrierCb.checked = true;
+      else deviceCb.checked = true;
+    }
+
+    document.getElementById('cu-fieldset-device').disabled = !deviceCb.checked;
+    document.getElementById('cu-fieldset-carrier').disabled = !carrierCb.checked;
+  }
+
+  /* ---------- モード1：機種からキャリアを探す ---------- */
+  function cu_resetSelect(id) {
+    const select = document.getElementById(id);
+    select.innerHTML = '<option value="">選択してください</option>';
+    select.disabled = true;
+  }
+
+  function cu_populate(id, keys) {
+    const select = document.getElementById(id);
+    keys.forEach(key => {
+      const opt = document.createElement('option');
+      opt.value = key;
+      opt.textContent = key;
+      select.appendChild(opt);
+    });
+    select.disabled = false;
+  }
+
+  function cu_renderEmpty(message) {
+    const result = document.getElementById('cu-result');
+    result.innerHTML = '<div class="cu-result-empty">' + (message || 'OS → メーカー → シリーズ → 機種名の順に選択してください') + '</div>';
+  }
+
+  function cu_resetKeyword() {
+    const keywordInput = document.getElementById('cu-keyword');
+    keywordInput.value = '';
+    keywordInput.disabled = true;
+  }
+
+  function cu_updateMaker() {
+    const os = document.getElementById('cu-os').value;
+    cu_resetSelect('cu-maker');
+    cu_resetSelect('cu-series');
+    cu_resetSelect('cu-model');
+    cu_resetKeyword();
+    cu_renderEmpty();
+    if (os && carrierData[os]) {
+      cu_populate('cu-maker', Object.keys(carrierData[os]));
+    }
+  }
+
+  function cu_updateSeries() {
+    const os = document.getElementById('cu-os').value;
+    const maker = document.getElementById('cu-maker').value;
+    cu_resetSelect('cu-series');
+    cu_resetSelect('cu-model');
+    cu_resetKeyword();
+    cu_renderEmpty();
+    if (os && maker && carrierData[os][maker]) {
+      cu_populate('cu-series', Object.keys(carrierData[os][maker]));
+    }
+  }
+
+  function cu_updateModel() {
+    const os = document.getElementById('cu-os').value;
+    const maker = document.getElementById('cu-maker').value;
+    const series = document.getElementById('cu-series').value;
+    const keywordInput = document.getElementById('cu-keyword');
+    keywordInput.value = '';
+    keywordInput.disabled = !(os && maker && series);
+    cu_filterModel();
+  }
+
+  function cu_filterModel() {
+    const os = document.getElementById('cu-os').value;
+    const maker = document.getElementById('cu-maker').value;
+    const series = document.getElementById('cu-series').value;
+    const keyword = document.getElementById('cu-keyword').value.trim().toLowerCase();
+    cu_resetSelect('cu-model');
+    cu_renderEmpty();
+    if (os && maker && series && carrierData[os][maker][series]) {
+      let keys = Object.keys(carrierData[os][maker][series]);
+      if (keyword) {
+        keys = keys.filter(k => k.toLowerCase().includes(keyword));
+      }
+      cu_populate('cu-model', keys);
+    }
+  }
+
+  function cu_chipHTML(carrierName, url) {
+    const col = cu_colorOf(carrierName);
+    return '<div class="cu-chip" style="--cu-accent:' + col.accent + ';--cu-bg:' + col.bg + ';">' +
+      '<span class="cu-chip-badge">' + carrierName + '</span>' +
+      '<a class="cu-chip-link" href="' + url + '" target="_blank" rel="noopener">公式サイトで確認 →</a>' +
+    '</div>';
+  }
+
+  function cu_showResult() {
+    const os = document.getElementById('cu-os').value;
+    const maker = document.getElementById('cu-maker').value;
+    const series = document.getElementById('cu-series').value;
+    const model = document.getElementById('cu-model').value;
+    const result = document.getElementById('cu-result');
+
+    if (!(os && maker && series && model)) {
+      cu_renderEmpty();
+      return;
+    }
+
+    const carriers = carrierData[os][maker][series][model];
+    if (!carriers || carriers.length === 0) {
+      cu_renderEmpty('対応キャリア情報が見つかりませんでした');
+      return;
+    }
+
+    const chips = carriers.map(item => cu_chipHTML(item.c, item.u)).join('');
+
+    result.innerHTML =
+      '<div class="cu-result-title">' +
+        cu_osBadgeHTML(os) + cu_makerBadgeHTML(maker) +
+        '<span class="cu-model-name">' + model + '</span>の対応キャリア' +
+        '<span class="cu-count-badge">' + carriers.length + '件</span>' +
+      '</div>' +
+      '<div class="cu-chip-list">' + chips + '</div>';
+  }
+
+  /* ---------- モード2：キャリアから機種を探す ---------- */
+  let ALL_DEVICES = [];
+
+  function cu_buildFlatList() {
+    Object.keys(carrierData).forEach(os => {
+      Object.keys(carrierData[os]).forEach(maker => {
+        Object.keys(carrierData[os][maker]).forEach(series => {
+          Object.keys(carrierData[os][maker][series]).forEach(model => {
+            ALL_DEVICES.push({
+              os: os,
+              maker: maker,
+              series: series,
+              model: model,
+              carriers: carrierData[os][maker][series][model]
+            });
+          });
+        });
+      });
+    });
+  }
+
+  function cu2_renderEmpty(message) {
+    const result = document.getElementById('cu2-result');
+    result.innerHTML = '<div class="cu-result-empty">' + (message || 'キャリアを選択してください') + '</div>';
+  }
+
+  function cu2_updateResult() {
+    const carrier = document.getElementById('cu2-carrier').value;
+    const os = document.getElementById('cu2-os').value;
+    const result = document.getElementById('cu2-result');
+
+    if (!carrier) {
+      cu2_renderEmpty();
+      return;
+    }
+
+    const matches = ALL_DEVICES.filter(d => {
+      if (!d.carriers.some(c => c.c === carrier)) return false;
+      if (os && d.os !== os) return false;
+      return true;
+    });
+
+    if (matches.length === 0) {
+      cu2_renderEmpty('条件に一致する機種が見つかりませんでした');
+      return;
+    }
+
+    const col = cu_colorOf(carrier);
+    const summary =
+      '<div class="cu-carrier-summary" style="--cu-accent:' + col.accent + ';--cu-bg:' + col.bg + ';">' +
+        '<span class="cu-carrier-summary-name">' + carrier + '<span class="cu-count-badge" style="margin-left:8px;">' + matches.length + '件</span></span>' +
+        '<a class="cu-chip-link" style="--cu-accent:' + col.accent + ';" href="' + (CARRIER_LINKS[carrier] || '#') + '" target="_blank" rel="noopener">公式サイトで確認 →</a>' +
+      '</div>';
+
+    const rows = matches.map(d =>
+      '<div class="cu-device-row" style="--cu-accent:' + col.accent + ';">' +
+        cu_osBadgeHTML(d.os) + cu_makerBadgeHTML(d.maker) +
+        '<span class="cu-device-model">' + d.model + '</span>' +
+      '</div>'
+    ).join('');
+
+    result.innerHTML = summary + '<div class="cu-device-list">' + rows + '</div>';
+  }
+
+  /* ---------- 初期化・リセット ---------- */
+  function cu_init() {
+    cu_populate('cu-os', Object.keys(carrierData));
+    cu_renderEmpty();
+
+    cu_buildFlatList();
+    const carrierSelect = document.getElementById('cu2-carrier');
+    CARRIER_ORDER.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      carrierSelect.appendChild(opt);
+    });
+    cu2_renderEmpty();
+  }
+
+  function cu_reset() {
+    document.getElementById('cu-mode-device').checked = true;
+    document.getElementById('cu-mode-carrier').checked = false;
+    document.getElementById('cu-fieldset-device').disabled = false;
+    document.getElementById('cu-fieldset-carrier').disabled = true;
+
+    document.getElementById('cu-os').value = '';
+    cu_updateMaker();
+
+    document.getElementById('cu2-carrier').value = '';
+    document.getElementById('cu2-os').value = '';
+    cu2_renderEmpty();
+  }
+
+  cu_init();
 </script>
 </body>
 </html>
