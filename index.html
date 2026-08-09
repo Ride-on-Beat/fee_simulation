@@ -623,10 +623,7 @@
     bottom: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    /* 💡 standalone起動時はsafe-area-inset-bottomが0より大きくなり、
-          固定60pxの中でpaddingとアイコン表示領域を取り合ってアイコンが
-          はみ出してしまうため、safe-area分を高さに加算して確保する */
-    height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+    height: 60px !important;
     background-color: #7a99cf !important;
     border-top: 1px solid #e0e0e0 !important;
     display: flex !important;
@@ -634,7 +631,7 @@
     align-items: center !important;
     z-index: 1000 !important;
     box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
   }
 
   .footer-tab {
@@ -830,7 +827,19 @@
       <h1 class="veil-outer-title">月額料金シミュレーション</h1>
       <div class="container">
 
-      <div class="card">
+      <div class="card" id="card-calc-mode">
+        <h2>検索方法</h2>
+        <div class="checkbox-group" id="calc-mode-group">
+          <label class="checkbox-label"><input type="checkbox" id="mode-device" class="calc-mode-cb"
+              onchange="if(this.checked){setCalcMode('device');}else{this.checked=true;}">本体代のみ検索する</label>
+          <label class="checkbox-label"><input type="checkbox" id="mode-fee" class="calc-mode-cb"
+              onchange="if(this.checked){setCalcMode('fee');}else{this.checked=true;}">料金のみを計算する</label>
+          <label class="checkbox-label"><input type="checkbox" id="mode-both" class="calc-mode-cb" checked
+              onchange="if(this.checked){setCalcMode('both');}else{this.checked=true;}">本体と料金を計算する</label>
+        </div>
+      </div>
+
+      <div class="card" id="card-phone">
         <h2>本体</h2>
         <div class="section">
           <label for="buy-mode">購入方法:</label>
@@ -880,23 +889,41 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="card-plan">
         <h2>月額料金</h2>
         <div class="section">
           <label for="plan-select">プラン:</label>
           <select id="plan-select" onchange="updateStrageSelect(); optionRules(); offOptions(); updatePriceOptions();">
             <option value="">-- 選択してください --</option>
-            <option value="MAX">ドコモMAX</option>
-            <option value="MAXP">ドコモポイ活MAX</option>
-            <option value="Pt20">ポイ活20</option>
-            <option value="mini">ドコモmini</option>
-            <option value="ahamo">ahamo</option>
+            <optgroup label="現行プラン">
+              <option value="MAX">ドコモMAX</option>
+              <option value="MAXP">ドコモポイ活MAX</option>
+              <option value="Pt20">ポイ活20</option>
+              <option value="mini">ドコモmini</option>
+              <option value="ahamo">ahamo</option>
+            </optgroup>
+            <optgroup label="旧プラン（受付終了）">
+              <option value="old-eximo">eximo</option>
+              <option value="old-eximopt">eximo ポイ活</option>
+              <option value="old-irumo">irumo</option>
+              <option value="old-5gpremia">5Gギガホ プレミア</option>
+              <option value="old-5glite">5Gギガライト</option>
+              <option value="old-5ggigaho">5Gギガホ</option>
+              <option value="old-gigahopremia">ギガホ プレミア</option>
+              <option value="old-gigalite">ギガライト</option>
+              <option value="old-gigaho">ギガホ</option>
+            </optgroup>
+            <optgroup label="年齢別プラン">
+              <option value="age-oyako">ドコモ親子割（5~15歳）</option>
+              <option value="age-u22">ドコモU22割（22歳以下）</option>
+              <option value="age-u29">ドコモU29割（23~29歳）</option>
+            </optgroup>
           </select>
         </div>
 
         <div class="section">
           <label for="strage-select">容量:</label>
-          <select id="strage-select" disabled onchange="updatePriceOptions()">
+          <select id="strage-select" disabled onchange="offOptions(); updatePriceOptions()">
             <option value="">-- 最初にプランを選んでください --</option>
           </select>
         </div>
@@ -922,7 +949,7 @@
         </div>
       </div>
 
-      <div class="card">
+      <div class="card" id="card-option">
         <h2>
             <span>オプション</span>
             <label class="clear-all-label"><input type="checkbox" id="clear-options"
@@ -989,7 +1016,7 @@
           </div>
         </div>
 
-        <div class="card">
+        <div class="card" id="card-discount">
           <h2>
             <span>割引</span>
             <label class="clear-all-label"><input type="checkbox" id="clear-discounts"
@@ -1055,7 +1082,7 @@
             <label class="checkbox-label">
               <div class="label-left">
                 <input type="checkbox" id="net" value="Net" onchange="offOptions(); updatePriceOptions();" disabled>ドコモ光
-                / Home 5Gセット割　▲￥1,210
+                / Home 5Gセット割　▲￥<span id="net-label-amount">1,210</span>
               </div>
               <span id="net-price" class="discount-price"
                 style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
@@ -1064,7 +1091,7 @@
             <label class="checkbox-label">
               <div class="label-left">
                 <input type="checkbox" id="ene" value="Ene" onchange="offOptions(); updatePriceOptions();"
-                  disabled>ドコモでんきセット割　▲￥110
+                  disabled>ドコモでんきセット割　▲￥<span id="ene-label-amount">110</span>
               </div>
               <span id="ene-price" class="discount-price"
                 style="margin-left: 8px; color: #c62828; font-weight: bold;"></span>
@@ -1079,7 +1106,7 @@
 
 
 
-        <div class="card">
+        <div class="card" id="card-otherfee">
           <h2>その他費用</h2>
           <label class="checkbox-label">
             <input type="checkbox" id="admin-fee" value="4950" onchange="updatePriceOptions();" disabled> 事務手数料　￥4,950
@@ -1164,6 +1191,22 @@
           </div>
         </div>
 
+        <div id="fee-only-result-card" class="card" style="background: #fff; border: none; display:none;">
+          <h2 style="border-bottom-color: var(--primary-color); font-size: 1.3rem;">計算結果（料金のみ）</h2>
+          <div class="result-container">
+            <div class="price-box box-once">
+              <strong>初回（当月日割り）お支払い金額</strong>
+              <div id="breakdown-fee-only-first" class="price-breakdown"></div>
+              <div id="price-fee-only-first" class="price-amount">¥0</div>
+            </div>
+            <div class="price-box box-continue">
+              <strong>2ヶ月目以降　月額料金</strong>
+              <div id="breakdown-fee-only-continue" class="price-breakdown"></div>
+              <div id="price-fee-only-continue" class="price-amount">¥0</div>
+            </div>
+          </div>
+        </div>
+
       <button type="button" class="btn-reset" onclick="resetAllInputs()">
         <span class="btn-reset-icon">🔄</span> 全てをリセット
       </button>
@@ -1219,7 +1262,7 @@
 
     <div class="footer-tab" onclick="switchTab('works')">
       <img src="toollogo.png" class="tab-icon" alt="">
-      <span class="tab-label">ツール一覧</span>
+      <span class="tab-label">ツール置き場</span>
     </div>
   </footer>
 
@@ -1268,15 +1311,6 @@
       //     スクロールエリアの高さを再計算すると、スクロールする度に範囲が変化してしまう
       //     不安定な状態（スクロールしてもしても終わらないように見える不具合）の原因になっていた。
     }
-    // 💡 ホーム画面のアプリを閉じて再度開いた際、iOSがフルリロードせず一時停止状態から
-    //     そのまま復元するだけのことがあり、その場合load/resizeが発火せず古いフッター位置の
-    //     まま残ってしまうため、pageshowとvisibilitychange(表示復帰時)でも測り直す
-    window.addEventListener('pageshow', syncFooterToVisualViewport);
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'visible') {
-        syncFooterToVisualViewport();
-      }
-    });
 
     // ページを開いた瞬間の時間を記録
     const startTime = Date.now();
@@ -1306,6 +1340,58 @@
     });
 
     let globalSalePrice = 0;
+
+    // =======================================================================================================================
+    // 🔀 検索方法（本体代のみ検索する／料金のみを計算する／本体と料金を計算する）の切り替え
+    let currentCalcMode = 'both';
+
+    function setCalcMode(mode) {
+      currentCalcMode = mode;
+
+      const cbDevice = document.getElementById('mode-device');
+      const cbFee = document.getElementById('mode-fee');
+      const cbBoth = document.getElementById('mode-both');
+      if (cbDevice) cbDevice.checked = (mode === 'device');
+      if (cbFee) cbFee.checked = (mode === 'fee');
+      if (cbBoth) cbBoth.checked = (mode === 'both');
+
+      const cardPhone = document.getElementById('card-phone');
+      const cardPlan = document.getElementById('card-plan');
+      const cardOption = document.getElementById('card-option');
+      const cardDiscount = document.getElementById('card-discount');
+      const cardOtherFee = document.getElementById('card-otherfee');
+      const finalResultCard = document.getElementById('final-result-card');
+      const feeOnlyResultCard = document.getElementById('fee-only-result-card');
+
+      const showPhone = (mode === 'device' || mode === 'both');
+      const showFee = (mode === 'fee' || mode === 'both');
+
+      if (cardPhone) cardPhone.style.display = showPhone ? '' : 'none';
+      if (cardPlan) cardPlan.style.display = showFee ? '' : 'none';
+      if (cardOption) cardOption.style.display = showFee ? '' : 'none';
+      if (cardDiscount) cardDiscount.style.display = showFee ? '' : 'none';
+      if (cardOtherFee) cardOtherFee.style.display = showFee ? '' : 'none';
+
+      // 💡「計算結果」（本体代あり前提の支払いタイミング別カード）は本体を検索する時だけ、
+      //    「計算結果（料金のみ）」は料金のみを計算する時だけ表示する
+      if (finalResultCard) finalResultCard.style.display = showPhone ? '' : 'none';
+      if (feeOnlyResultCard) feeOnlyResultCard.style.display = (mode === 'fee') ? '' : 'none';
+
+      // 💡 表示しなくなった側の入力値が、見えないまま計算に紛れ込まないようリセットする
+      if (!showPhone) {
+        const buyModeSel = document.getElementById('buy-mode');
+        if (buyModeSel) buyModeSel.value = '';
+        if (typeof buyMethod === 'function') buyMethod();
+      }
+      if (!showFee) {
+        if (typeof resetPlanInputs === 'function') resetPlanInputs();
+        if (typeof clearAllGroup === 'function') { clearAllGroup('options'); clearAllGroup('discounts'); }
+        const adminFeeCheck = document.getElementById('admin-fee');
+        if (adminFeeCheck) adminFeeCheck.checked = false;
+      }
+
+      if (typeof updatePriceOptions === 'function') updatePriceOptions();
+    }
 
     // 本体代金や残価の入力、購入方法の変更時に即座に計算を回す
     function calcSalePrice() {
@@ -1459,12 +1545,127 @@
       'MAXP': [{ value: 'MAXPst', text: '無制限' }],
       'Pt20': [{ value: 'Pt20st1', text: '~20GB' }, { value: 'Pt20st2', text: '無制限' }],
       'mini': [{ value: 'minist1', text: '4GB' }, { value: 'minist2', text: '10GB' }],
-      'ahamo': [{ value: 'ahamost', text: '30GB' }]
+      'ahamo': [{ value: 'ahamost', text: '30GB' }],
+      // 📴 旧プラン（受付終了）：プラン検索タブの「受付終了プラン検索」（docomo）と同じ構成・金額
+      'old-eximo': [{ value: 'old-eximo-1', text: '~1GB' }, { value: 'old-eximo-2', text: '1~3GB' }, { value: 'old-eximo-3', text: '3GB~' }],
+      'old-eximopt': [{ value: 'old-eximopt-1', text: '無制限' }],
+      'old-irumo': [{ value: 'old-irumo-1', text: '0.5GB' }, { value: 'old-irumo-2', text: '3GB' }, { value: 'old-irumo-3', text: '6GB' }, { value: 'old-irumo-4', text: '9GB' }],
+      'old-5gpremia': [{ value: 'old-5gpremia-1', text: '~3GB' }, { value: 'old-5gpremia-2', text: '3GB~' }],
+      'old-5glite': [{ value: 'old-5glite-1', text: '~1GB' }, { value: 'old-5glite-2', text: '1~3GB' }, { value: 'old-5glite-3', text: '3~5GB' }, { value: 'old-5glite-4', text: '5~7GB' }],
+      'old-5ggigaho': [{ value: 'old-5ggigaho-1', text: '無制限' }],
+      'old-gigahopremia': [{ value: 'old-gigahopremia-1', text: '~3GB' }, { value: 'old-gigahopremia-2', text: '3GB~' }],
+      'old-gigalite': [{ value: 'old-gigalite-1', text: '~1GB' }, { value: 'old-gigalite-2', text: '1~3GB' }, { value: 'old-gigalite-3', text: '3~5GB' }, { value: 'old-gigalite-4', text: '5~7GB' }],
+      'old-gigaho': [{ value: 'old-gigaho-1', text: '30GB' }],
+      // 🎂 年齢別プラン：年齢別プランタブの docomo と同じ構成・金額
+      'age-oyako': [{ value: 'age-oyako-1', text: '5GB' }, { value: 'age-oyako-2', text: '20GB' }],
+      'age-u22': [{ value: 'age-u22-1', text: '~28GB' }, { value: 'age-u22-2', text: '28~30GB' }, { value: 'age-u22-3', text: '30GB~' }],
+      'age-u29': [{ value: 'age-u29-1', text: '~28GB' }, { value: 'age-u29-2', text: '28~30GB' }, { value: 'age-u29-3', text: '30GB~' }]
     };
 
     const priceList = {
-      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'ahamost': 2970
+      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'ahamost': 2970,
+      'old-eximo-1': 4565, 'old-eximo-2': 5665, 'old-eximo-3': 7315,
+      'old-eximopt-1': 10615,
+      'old-irumo-1': 550, 'old-irumo-2': 2167, 'old-irumo-3': 2827, 'old-irumo-4': 3377,
+      'old-5gpremia-1': 5665, 'old-5gpremia-2': 7315,
+      'old-5glite-1': 3465, 'old-5glite-2': 4565, 'old-5glite-3': 5665, 'old-5glite-4': 6765,
+      'old-5ggigaho-1': 8415,
+      'old-gigahopremia-1': 5555, 'old-gigahopremia-2': 7205,
+      'old-gigalite-1': 3465, 'old-gigalite-2': 4565, 'old-gigalite-3': 5665, 'old-gigalite-4': 6765,
+      'old-gigaho-1': 7865,
+      'age-oyako-1': 1408, 'age-oyako-2': 1408,
+      'age-u22-1': 2970, 'age-u22-2': 2970, 'age-u22-3': 7898,
+      'age-u29-1': 2970, 'age-u29-2': 2970, 'age-u29-3': 7898
     };
+
+    // 💰 プランごとの割引デフォルト（プラン検索／年齢別プランタブのマスターデータより）
+    // family・user（長期利用割）・cardは [値] または [値1, 値2] の配列（空配列 = 対象外）
+    // card配列は [通常dカード, dカード GOLD系] の並び。要素が1つだけの場合は種類を問わず同額。
+    const planDiscountDefaults = {
+      MAX: { family: [550, 1210], user: [110, 220], card: [220, 550], net: 1210, ene: 110 },
+      MAXP: { family: [550, 1210], user: [110, 220], card: [220, 550], net: 1210, ene: 110 },
+      Pt20: { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: 110 },
+      mini: { family: [], user: [], card: [220, 550], net: 1210, ene: 110 },
+      ahamo: { family: [], user: [], card: [], net: null, ene: null },
+
+      'old-eximo': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-eximopt': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-irumo': { family: [], user: [], card: [187], net: 1100, ene: null },
+      'old-5gpremia': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-5glite': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-5ggigaho': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-gigahopremia': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-gigalite': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+      'old-gigaho': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
+
+      'age-oyako': { family: [], user: [], card: [220, 550], net: null, ene: null },
+      'age-u22': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null },
+      'age-u29': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null }
+    };
+
+    // 🔧 特定の容量（tier）だけプランのデフォルト割引と異なる場合の上書き（プラン検索タブのデータに準拠）
+    const tierDiscountOverrides = {
+      'old-irumo-1': { family: [], card: [], net: null, ene: null },   // irumo 0.5GB：全割引対象外
+      'old-5glite-1': { net: null },                                   // 5Gギガライト ~1GB：セット割対象外
+      'old-5glite-2': { net: 550 },                                    // 5Gギガライト 1~3GB：セット割が550円に
+      'old-gigalite-1': { net: null },                                 // ギガライト ~1GB：セット割対象外
+      'old-gigalite-2': { net: 550 }                                   // ギガライト 1~3GB：セット割が550円に
+    };
+
+    // 現在選択されているプラン・容量から、有効な割引設定（デフォルト＋tier上書き）を返す
+    function getEffectiveDiscounts() {
+      const planSelect = document.getElementById('plan-select');
+      const strageSelect = document.getElementById('strage-select');
+      const planValue = planSelect ? planSelect.value : '';
+      const strageValue = strageSelect ? strageSelect.value : '';
+      const base = planDiscountDefaults[planValue] || { family: [], user: [], card: [], net: null, ene: null };
+      const override = tierDiscountOverrides[strageValue] || {};
+      return Object.assign({}, base, override);
+    }
+
+    // 指定した<select>内の指定<option>のテキストを書き換える
+    function setOptionText(selectId, optionValue, text) {
+      const select = document.getElementById(selectId);
+      if (!select) return;
+      const opt = Array.from(select.options).find(o => o.value === optionValue);
+      if (opt) opt.text = text;
+    }
+
+    // eff（有効な割引設定）を元に offPrice（実際の割引額テーブル）と各選択肢の表示ラベルを更新する
+    function applyDiscountAmounts(eff) {
+      const famVals = eff.family || [];
+      const famUnder2 = famVals.length > 0 ? famVals[0] : 0;
+      const famOver3 = famVals.length > 1 ? famVals[1] : famVals[0] || 0;
+      offPrice['under2'] = famUnder2;
+      offPrice['over3'] = famOver3;
+      setOptionText('people-select', 'under2', '2人　▲￥' + famUnder2.toLocaleString());
+      setOptionText('people-select', 'over3', '3人以上　▲￥' + famOver3.toLocaleString());
+
+      const userVals = eff.user || [];
+      const userUnder10 = userVals.length > 0 ? userVals[0] : 0;
+      const userOver20 = userVals.length > 1 ? userVals[1] : userVals[0] || 0;
+      offPrice['under10'] = userUnder10;
+      offPrice['over20'] = userOver20;
+      setOptionText('user-select', 'under10', '10年以上20年未満　▲￥' + userUnder10.toLocaleString());
+      setOptionText('user-select', 'over20', '20年以上　▲￥' + userOver20.toLocaleString());
+
+      const cardVals = eff.card || [];
+      const cardRegular = cardVals.length > 0 ? cardVals[0] : 0;
+      const cardGold = cardVals.length > 1 ? cardVals[1] : cardVals[0] || 0;
+      offPrice['regular'] = cardRegular;
+      offPrice['GOLD-U'] = cardGold;
+      offPrice['GOLD'] = cardGold;
+      offPrice['PLUTINUM'] = cardGold;
+      setOptionText('card-select', 'regular', 'dカード　▲￥' + cardRegular.toLocaleString());
+      setOptionText('card-select', 'GOLD-U', 'dカード GOLD U　▲￥' + cardGold.toLocaleString());
+      setOptionText('card-select', 'GOLD', 'dカード GOLD　▲￥' + cardGold.toLocaleString());
+      setOptionText('card-select', 'PLUTINUM', 'dカード PLUTINUM　▲￥' + cardGold.toLocaleString());
+
+      offPrice['net'] = eff.net || 0;
+      offPrice['ene'] = eff.ene || 0;
+      const netLabel = document.getElementById('net-label-amount'); if (netLabel) netLabel.innerText = (eff.net || 0).toLocaleString();
+      const eneLabel = document.getElementById('ene-label-amount'); if (eneLabel) eneLabel.innerText = (eff.ene || 0).toLocaleString();
+    }
 
     const optionPrices = {
       '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 550, 'dval': 550, 'bst': 550, 'ks': 700, 'ah-tel': 1100, 'ah-mega': 1980, 'ah-pt': 2200
@@ -1639,6 +1840,7 @@
         if (userBox) userBox.classList.add('disabled-box'); if (userSelect) { userSelect.value = ""; userSelect.disabled = true; }
         if (cardBox) cardBox.classList.add('disabled-box'); if (cardSelect) { cardSelect.value = ""; cardSelect.disabled = true; }
         if (adminFeeCheck) { adminFeeCheck.checked = false; adminFeeCheck.disabled = true; }
+        applyDiscountAmounts({ family: [], user: [], card: [], net: null, ene: null });
         updatePriceOptions();
         return;
       }
@@ -1647,15 +1849,17 @@
       allChecks.forEach(ch => { if (ch) ch.disabled = false; });
       if (adminFeeCheck) adminFeeCheck.disabled = false;
 
-      // プランごとの排他無効化
-      if (planSelect.value === 'ahamo') {
-        allChecks.forEach(ch => { if (ch) { ch.checked = false; ch.disabled = true; } });
-      } else if (planSelect.value === 'Pt20') {
-        if (userCheck) { userCheck.checked = false; userCheck.disabled = true; }
-      } else if (planSelect.value === 'mini') {
-        if (familyCheck) { familyCheck.checked = false; familyCheck.disabled = true; }
-        if (userCheck) { userCheck.checked = false; userCheck.disabled = true; }
-      }
+      // プラン（＋容量）ごとの割引額をラベルに反映し、対象外の割引は無効化する
+      // 💡 現行プラン（MAX/MAXP/Pt20/mini/ahamo）に加え、旧プラン・年齢別プランも
+      //    プラン検索／年齢別プランタブと同じ割引データ（planDiscountDefaults）で判定する
+      const eff = getEffectiveDiscounts();
+      applyDiscountAmounts(eff);
+
+      if (eff.family.length === 0) { if (familyCheck) { familyCheck.checked = false; familyCheck.disabled = true; } }
+      if (eff.user.length === 0) { if (userCheck) { userCheck.checked = false; userCheck.disabled = true; } }
+      if (eff.card.length === 0) { if (cardCheck) { cardCheck.checked = false; cardCheck.disabled = true; } }
+      if (eff.net === null) { if (netCheck) { netCheck.checked = false; netCheck.disabled = true; } }
+      if (eff.ene === null) { if (eneCheck) { eneCheck.checked = false; eneCheck.disabled = true; } }
 
       // 表示切り替えとテキスト初期化
       if (familyCheck && familyCheck.checked && !familyCheck.disabled) {
@@ -1743,6 +1947,12 @@
         if (op5mTel) { op5mTel.checked = false; op5mTel.disabled = true; }
         if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
         if (opMail) { opMail.checked = false; opMail.disabled = true; }
+      } else if (planSelect.value.indexOf('old-') === 0 || planSelect.value.indexOf('age-') === 0) {
+        // 📴🎂 旧プラン・年齢別プランは ahamo 以外の docomo 通常プラン（MAX系）と同じオプション構成として扱う
+        if (opMail) { opMail.checked = false; opMail.disabled = true; }
+        if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
+        if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
+        if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
       }
 
       toggleSmartAnshinOptions();
@@ -1808,67 +2018,75 @@
       const cardSelect = document.getElementById('card-select');   // dカードの種類
 
 
-      // 1. 購入方法のチェック
-      if (!buyMode || !buyMode.value || buyMode.value === "") {
-        errors.push("購入方法");
-        if (buyMode) buyMode.classList.add('input-error-highlight');
-      } else {
-        if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
-          errors.push("本体代金");
-          if (phonePrice) phonePrice.classList.add('input-error-highlight');
-        }
-        if (buyMode.value === 'divide' && (!selectTime || !selectTime.value)) {
-          errors.push("分割回数");
-          if (selectTime) selectTime.classList.add('input-error-highlight');
-        }
-        if (buyMode.value === 'kaedoki') {
-          if (!phoneCredit || !phoneCredit.value || Number(phoneCredit.value) <= 0) {
-            errors.push("残価");
-            if (phoneCredit) phoneCredit.classList.add('input-error-highlight');
+      // 💡 検索方法（本体代のみ／料金のみ／本体と料金）に応じて、非表示にしている側の入力チェックはスキップする
+      const calcMode = typeof currentCalcMode !== 'undefined' ? currentCalcMode : 'both';
+
+      // 1. 購入方法のチェック（「料金のみを計算する」では本体側は非表示のためチェック不要）
+      if (calcMode !== 'fee') {
+        if (!buyMode || !buyMode.value || buyMode.value === "") {
+          errors.push("購入方法");
+          if (buyMode) buyMode.classList.add('input-error-highlight');
+        } else {
+          if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
+            errors.push("本体代金");
+            if (phonePrice) phonePrice.classList.add('input-error-highlight');
+          }
+          if (buyMode.value === 'divide' && (!selectTime || !selectTime.value)) {
+            errors.push("分割回数");
+            if (selectTime) selectTime.classList.add('input-error-highlight');
+          }
+          if (buyMode.value === 'kaedoki') {
+            if (!phoneCredit || !phoneCredit.value || Number(phoneCredit.value) <= 0) {
+              errors.push("残価");
+              if (phoneCredit) phoneCredit.classList.add('input-error-highlight');
+            }
           }
         }
       }
 
-      // 2. プラン・容量のチェック
-      if (!planSelect || !planSelect.value || planSelect.value === "") {
-        errors.push("プラン");
-        if (planSelect) planSelect.classList.add('input-error-highlight');
-      } else {
-        if (!strageSelect || !strageSelect.value || strageSelect.value === "") {
-          errors.push("容量");
-          if (strageSelect) strageSelect.classList.add('input-error-highlight');
+      // 2〜4. プラン・容量・日付・割引のチェック（「本体代のみ検索する」では料金側は非表示のためチェック不要）
+      if (calcMode !== 'device') {
+        // 2. プラン・容量のチェック
+        if (!planSelect || !planSelect.value || planSelect.value === "") {
+          errors.push("プラン");
+          if (planSelect) planSelect.classList.add('input-error-highlight');
+        } else {
+          if (!strageSelect || !strageSelect.value || strageSelect.value === "") {
+            errors.push("容量");
+            if (strageSelect) strageSelect.classList.add('input-error-highlight');
+          }
         }
-      }
 
-      // 3. 日付のチェック
-      if (!today || !today.value || today.value === "") {
-        errors.push("日付");
-        if (today) today.classList.add('input-error-highlight');
-      }
-
-      // ⚡ 4. 【新設】割引の未選択（中途半端な状態）をブロック！
-
-      // ① みんなドコモ割にチェックがあるのに、人数が未選択の場合
-      if (dFamily && dFamily.checked) {
-        if (!peopleSelect || !peopleSelect.value || peopleSelect.value === "") {
-          errors.push("家族人数");
-          if (peopleSelect) peopleSelect.classList.add('input-error-highlight');
+        // 3. 日付のチェック
+        if (!today || !today.value || today.value === "") {
+          errors.push("日付");
+          if (today) today.classList.add('input-error-highlight');
         }
-      }
 
-      // ② 長期利用割にチェックがあるのに、利用年数が未選択の場合
-      if (dUserCheck && dUserCheck.checked) {
-        if (!userSelect || !userSelect.value || userSelect.value === "") {
-          errors.push("利用年数");
-          if (userSelect) userSelect.classList.add('input-error-highlight');
+        // ⚡ 4. 【新設】割引の未選択（中途半端な状態）をブロック！
+
+        // ① みんなドコモ割にチェックがあるのに、人数が未選択の場合
+        if (dFamily && dFamily.checked) {
+          if (!peopleSelect || !peopleSelect.value || peopleSelect.value === "") {
+            errors.push("家族人数");
+            if (peopleSelect) peopleSelect.classList.add('input-error-highlight');
+          }
         }
-      }
 
-      // ③ dカードお支払割にチェックがあるのに、カードの種類が未選択の場合
-      if (dCardCheck && dCardCheck.checked) {
-        if (!cardSelect || !cardSelect.value || cardSelect.value === "") {
-          errors.push("カードの種類");
-          if (cardSelect) cardSelect.classList.add('input-error-highlight');
+        // ② 長期利用割にチェックがあるのに、利用年数が未選択の場合
+        if (dUserCheck && dUserCheck.checked) {
+          if (!userSelect || !userSelect.value || userSelect.value === "") {
+            errors.push("利用年数");
+            if (userSelect) userSelect.classList.add('input-error-highlight');
+          }
+        }
+
+        // ③ dカードお支払割にチェックがあるのに、カードの種類が未選択の場合
+        if (dCardCheck && dCardCheck.checked) {
+          if (!cardSelect || !cardSelect.value || cardSelect.value === "") {
+            errors.push("カードの種類");
+            if (cardSelect) cardSelect.classList.add('input-error-highlight');
+          }
         }
       }
 
@@ -2048,6 +2266,28 @@
       const adminFeeCheck = document.getElementById('admin-fee');
       if (adminFeeCheck && adminFeeCheck.checked && !adminFeeCheck.disabled) {
         adminFee = 4950;
+      }
+
+      // 💡「料金のみを計算する」モード用：本体代を含まない月額料金の合計だけを表示する
+      const feeOnlyFirstSpan = document.getElementById('price-fee-only-first');
+      const feeOnlyFirstBk = document.getElementById('breakdown-fee-only-first');
+      const feeOnlyContinueSpan = document.getElementById('price-fee-only-continue');
+      const feeOnlyContinueBk = document.getElementById('breakdown-fee-only-continue');
+
+      if (feeOnlyFirstBk) {
+        feeOnlyFirstBk.innerHTML = '<div style="background-color: #f0f7ff; padding: 10px; border-radius: 6px;">' +
+          '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>' +
+          '</div>';
+      }
+      if (feeOnlyContinueBk) {
+        feeOnlyContinueBk.innerHTML = '<div style="background-color: #fffaf0; padding: 10px; border-radius: 6px;">' +
+          '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
+          '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
+          '</div>';
       }
 
       // 4. 購入方法に応じた端末代金の計算 ＆ ボックス表示制御
@@ -2247,12 +2487,28 @@
         setForceErrorBox(document.getElementById('price-kaedoki-24'), '#6b21a8');
         setForceErrorBox(document.getElementById('price-kaedoki-25'), '#6b21a8');
 
+        // 🟦🟨 【「料金のみを計算する」モード用の合計欄】
+        setForceErrorBox(feeOnlyFirstSpan, '#1e40af');
+        setForceErrorBox(feeOnlyContinueSpan, '#b45309');
+
       } else {
         // 💡 エラーがない時だけ、通常の金額を綺麗に表示する
         if (priceMonth1Span) {
           priceMonth1Span.innerText = '¥' + totalMonth1.toLocaleString();
           priceMonth1Span.style.setProperty('color', '#c92a2a', 'important');
           priceMonth1Span.style.fontWeight = 'bold';
+        }
+
+        // 🟦🟨【「料金のみを計算する」モード用の合計欄】本体代を含まない月額料金だけの合計
+        if (feeOnlyFirstSpan) {
+          feeOnlyFirstSpan.innerText = '¥' + (commsDayTotal + adminFee).toLocaleString();
+          feeOnlyFirstSpan.style.setProperty('color', '#c92a2a', 'important');
+          feeOnlyFirstSpan.style.fontWeight = 'bold';
+        }
+        if (feeOnlyContinueSpan) {
+          feeOnlyContinueSpan.innerText = '¥' + communicationPureTotal.toLocaleString();
+          feeOnlyContinueSpan.style.setProperty('color', '#c92a2a', 'important');
+          feeOnlyContinueSpan.style.fontWeight = 'bold';
         }
 
         // 🟥【追加】一括払いの時の店頭決済本体代をここで赤色に固定します！
@@ -2570,6 +2826,9 @@
       updatePriceOptions();
     }
     function resetAllInputs() {
+      // 0. 検索方法（本体代のみ／料金のみ／本体と料金）も初期状態の「本体と料金を計算する」に戻す
+      if (typeof setCalcMode === 'function') setCalcMode('both');
+
       // 1. 各種プルダウンや日付の選択を初期状態（空）に戻す
       const buyMode = document.getElementById('buy-mode');
       const planSelect = document.getElementById('plan-select');
