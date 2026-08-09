@@ -1117,6 +1117,21 @@
 
         <div id="final-result-card" class="card" style="background: #fff; border: none;">
           <h2 style="border-bottom-color: var(--primary-color); font-size: 1.3rem;">計算結果</h2>
+          <div id="age-plan-notice" class="price-box" style="display:none; background:#fff8e1; border:1px solid #ffca28; margin-bottom:14px;">
+            <strong id="age-plan-notice-title">年齢別プランの適用期間</strong>
+            <div class="price-breakdown" id="age-plan-notice-desc"></div>
+            <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+              <div style="flex:1; min-width:140px;">
+                <div style="font-size:0.8rem; color:#555;">割引期間中の月額料金</div>
+                <div class="price-amount" id="age-plan-notice-before" style="font-size:1.2rem;">¥0</div>
+              </div>
+              <div style="flex:1; min-width:140px;">
+                <div style="font-size:0.8rem; color:#555;">期間終了後の月額料金（通常料金）</div>
+                <div class="price-amount" id="age-plan-notice-after" style="font-size:1.2rem;">¥0</div>
+              </div>
+            </div>
+            <div id="age-plan-notice-note" style="font-size:0.78rem; color:#777; margin-top:6px;"></div>
+          </div>
           <div class="result-container">
             <div id="once-fee-box" class="price-box box-once disabled-box">
               <strong>【店頭決済】本体代金（一括）</strong>
@@ -1377,6 +1392,18 @@
       if (finalResultCard) finalResultCard.style.display = showPhone ? '' : 'none';
       if (feeOnlyResultCard) feeOnlyResultCard.style.display = (mode === 'fee') ? '' : 'none';
 
+      // 💡 年齢別プランの適用期間ボックスは、今表示されている方の「計算結果」の先頭へ移動させる
+      const ageNotice = document.getElementById('age-plan-notice');
+      if (ageNotice) {
+        const targetCard = (mode === 'fee') ? feeOnlyResultCard : finalResultCard;
+        if (targetCard) {
+          const resultContainer = targetCard.querySelector('.result-container');
+          if (resultContainer && ageNotice.parentElement !== targetCard) {
+            targetCard.insertBefore(ageNotice, resultContainer);
+          }
+        }
+      }
+
       // 💡 表示しなくなった側の入力値が、見えないまま計算に紛れ込まないようリセットする
       if (!showPhone) {
         const buyModeSel = document.getElementById('buy-mode');
@@ -1610,6 +1637,23 @@
       'old-5glite-2': { net: 550 },                                    // 5Gギガライト 1~3GB：セット割が550円に
       'old-gigalite-1': { net: null },                                 // ギガライト ~1GB：セット割対象外
       'old-gigalite-2': { net: 550 }                                   // ギガライト 1~3GB：セット割が550円に
+    };
+
+    // 🎂 年齢別プラン：割引適用期間が終了した後の「通常プラン料金」（年齢別プランタブのmemo記載の額に準拠）
+    //    ドコモU22割／U29割はいずれも最小容量が28GB～と、期間終了後に切り替わる通常ドコモMAXの
+    //    最上位帯（3GB～）を大きく上回るため、どの容量を選んでいても通常ドコモMAXの最上位帯料金になる
+    const ageAfterPrice = {
+      'age-oyako-1': 1958, // ドコモ親子割 5GB：13ヶ月目以降
+      'age-oyako-2': 2728, // ドコモ親子割 20GBまで：13ヶ月目以降
+      'age-u22-1': 8448, 'age-u22-2': 8448, 'age-u22-3': 8448,   // ドコモU22割：7ヶ月以降は通常ドコモMAX
+      'age-u29-1': 8448, 'age-u29-2': 8448, 'age-u29-3': 8448    // ドコモU29割：3ヶ月以降は通常ドコモMAX
+    };
+
+    // 🎂 年齢別プラン：適用期間の長さ・期間終了後の注記
+    const ageAfterInfo = {
+      'age-oyako': { deadlineText: '加入から最大12ヶ月間', afterNote: '13ヶ月目以降は親子割（U15）対象外の通常料金になります。' },
+      'age-u22': { deadlineText: '加入から7ヶ月間', afterNote: '7ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' },
+      'age-u29': { deadlineText: '加入から3ヶ月間', afterNote: '3ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' }
     };
 
     // 現在選択されているプラン・容量から、有効な割引設定（デフォルト＋tier上書き）を返す
@@ -2207,6 +2251,40 @@
 
       let communicationPureTotal = planSubtotal + optionSubtotal - discountSubtotal;
       if (communicationPureTotal < 0) communicationPureTotal = 0;
+
+      // 🎂 年齢別プラン（ドコモ親子割／U22割／U29割）を選択している場合、計算結果に
+      //    「割引期間中」と「期間終了後（通常料金）」の月額を分けて一緒に表示する
+      const agePlanSelect = document.getElementById('plan-select');
+      const agePlanValue = agePlanSelect ? agePlanSelect.value : '';
+      const ageNoticeBox = document.getElementById('age-plan-notice');
+      if (ageNoticeBox) {
+        const ageInfo = ageAfterInfo[agePlanValue];
+        const ageAfterUnit = (typeof selectedStrage !== 'undefined' && selectedStrage) ? ageAfterPrice[selectedStrage] : undefined;
+
+        if (ageInfo && ageAfterUnit !== undefined) {
+          let ageAfterTotal = ageAfterUnit + optionSubtotal - discountSubtotal;
+          if (ageAfterTotal < 0) ageAfterTotal = 0;
+
+          const planLabelOpt = agePlanSelect.options[agePlanSelect.selectedIndex];
+          const planLabel = planLabelOpt ? planLabelOpt.text : '';
+
+          const titleEl = document.getElementById('age-plan-notice-title');
+          const descEl = document.getElementById('age-plan-notice-desc');
+          const beforeEl = document.getElementById('age-plan-notice-before');
+          const afterEl = document.getElementById('age-plan-notice-after');
+          const noteEl = document.getElementById('age-plan-notice-note');
+
+          if (titleEl) titleEl.innerText = planLabel + 'の適用期間';
+          if (descEl) descEl.innerText = '割引適用期間：' + ageInfo.deadlineText;
+          if (beforeEl) beforeEl.innerText = '¥' + communicationPureTotal.toLocaleString();
+          if (afterEl) afterEl.innerText = '¥' + ageAfterTotal.toLocaleString();
+          if (noteEl) noteEl.innerText = ageInfo.afterNote;
+
+          ageNoticeBox.style.display = '';
+        } else {
+          ageNoticeBox.style.display = 'none';
+        }
+      }
 
       // 3. 日割り計算 ＆ 事務手数料の判定
       let planDayPrice = 0;
