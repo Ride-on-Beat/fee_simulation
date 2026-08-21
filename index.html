@@ -854,7 +854,7 @@
         <div class="section">
           <label for="phonePrice">本体代（値引き後）:￥</label>
           <input type="number" id="phonePrice" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0"
-            min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
+            min="0" disabled oninput="restrictToDigits(this); calcSalePrice('price'); updatePriceOptions();">
           <span style="font-size:0.9rem;"></span>
         </div>
 
@@ -877,11 +877,13 @@
             <div>
               <label for="phoneCredit" style="font-size:0.8rem; display:block; margin-bottom:4px;">残価:￥</label>
               <input type="number" id="phoneCredit" class="amount-input" inputmode="numeric" pattern="[0-9]*"
-                placeholder="0" min="0" disabled oninput="calcSalePrice(); updatePriceOptions();">
+                placeholder="0" min="0" disabled oninput="restrictToDigits(this); calcSalePrice(); updatePriceOptions();">
             </div>
             <div>
-              <label style="font-size:0.8rem; display:block; margin-bottom:4px;">23ヶ月総支払額:</label>
-              <div id="salePriceText" class="text-display-badge">0 </div>
+              <label for="salePriceText" style="font-size:0.8rem; display:block; margin-bottom:4px;">23ヶ月間総支払い額:￥</label>
+              <input type="number" id="salePriceText" class="amount-input" inputmode="numeric" pattern="[0-9]*"
+                placeholder="0" min="0" disabled oninput="restrictToDigits(this); calcSalePrice('total'); updatePriceOptions();">
+              <div style="font-size:0.72rem; color:#555; margin-top:4px;">※直接入力すると、本体代（値引き後）の入力なしで残価との2つだけで計算できます</div>
               <div id="kaedoki-error-message"
                 style="color: #ff3333; font-weight: bold; font-size: 0.9rem; margin-top: 5px;"></div>
             </div>
@@ -902,7 +904,7 @@
               <option value="mini">ドコモmini</option>
               <option value="ahamo">ahamo</option>
             </optgroup>
-            <optgroup label="旧プラン（受付終了）">
+            <optgroup label="旧プラン（受付終了）" id="plan-old-group">
               <option value="old-eximo">eximo</option>
               <option value="old-eximopt">eximo ポイ活</option>
               <option value="old-irumo">irumo</option>
@@ -1356,6 +1358,17 @@
 
     let globalSalePrice = 0;
 
+    // 💡 いつでもカエドキプログラムの金額入力モード
+    //    'price' = 本体代（値引き後）と残価から23ヶ月間総支払い額を自動計算する
+    //    'total' = 23ヶ月間総支払い額を直接入力し、本体代（値引き後）は使わない
+    let kaedokiInputMode = 'price';
+
+    // 💡 テンキー（半角数字）以外の文字が入力・貼り付けされた場合は取り除く
+    function restrictToDigits(el) {
+      const cleaned = el.value.replace(/[^0-9]/g, '');
+      if (cleaned !== el.value) el.value = cleaned;
+    }
+
     // =======================================================================================================================
     // 🔀 検索方法（本体代のみ検索する／料金のみを計算する／本体と料金を計算する）の切り替え
     let currentCalcMode = 'both';
@@ -1417,23 +1430,61 @@
         if (adminFeeCheck) adminFeeCheck.checked = false;
       }
 
+      // 💡「本体と料金を計算する」では、既に受付終了している旧プランは選択できないよう除外する
+      const oldPlanGroup = document.getElementById('plan-old-group');
+      if (oldPlanGroup) {
+        const excludeOldPlans = (mode === 'both');
+        oldPlanGroup.disabled = excludeOldPlans;
+        oldPlanGroup.hidden = excludeOldPlans;
+        Array.from(oldPlanGroup.querySelectorAll('option')).forEach(opt => {
+          opt.disabled = excludeOldPlans;
+          opt.hidden = excludeOldPlans;
+        });
+
+        // 除外した際、旧プランが選択中だった場合は選択状態をリセットする
+        const planSelect = document.getElementById('plan-select');
+        if (excludeOldPlans && planSelect && planSelect.value.startsWith('old-')) {
+          planSelect.value = '';
+          if (typeof updateStrageSelect === 'function') updateStrageSelect();
+          if (typeof optionRules === 'function') optionRules();
+          if (typeof offOptions === 'function') offOptions();
+        }
+      }
+
       if (typeof updatePriceOptions === 'function') updatePriceOptions();
     }
 
-    // 本体代金や残価の入力、購入方法の変更時に即座に計算を回す
-    function calcSalePrice() {
+    // 💡 初期表示時（チェックボックスの checked 属性だけでは onchange が発火しないため）にも
+    //    デフォルトモード「本体と料金を計算する」の旧プラン除外を適用しておく
+    window.addEventListener('DOMContentLoaded', () => setCalcMode(currentCalcMode));
+
+    // 本体代金や残価、23ヶ月間総支払い額の入力、購入方法の変更時に即座に計算を回す
+    // source: 'price' = 本体代（値引き後）を編集した → 本体代-残価から自動計算するモードに戻す
+    //         'total' = 23ヶ月間総支払い額を直接編集した → その値をそのまま採用するモードに切り替える
+    //         省略時  = 現在のモードを維持したまま再計算のみ行う（残価の編集や購入方法の変更時など）
+    function calcSalePrice(source) {
       const buyMode = document.getElementById('buy-mode').value;
-      const textBadge = document.getElementById('salePriceText');
+      const totalInput = document.getElementById('salePriceText');
+
+      if (source === 'price') {
+        kaedokiInputMode = 'price';
+      } else if (source === 'total') {
+        // 空にした場合は自動計算モードへ戻す
+        kaedokiInputMode = (totalInput && totalInput.value !== '') ? 'total' : 'price';
+      }
+
+      // 👇 if文で使う前に、ここで先に要素を取得しておく
+      const errorMsg = document.getElementById('kaedoki-error-message');
+      const nextSelect = document.getElementById('plan-select');
 
       if (buyMode === 'kaedoki') {
         const phonePrice = Number(document.getElementById('phonePrice').value) || 0;
         const phoneCredit = Number(document.getElementById('phoneCredit').value) || 0;
 
-        let diff = phonePrice - phoneCredit;
-
-        // 👇【修正位置】if文で使う前に、ここで先に要素を取得しておく！
-        const errorMsg = document.getElementById('kaedoki-error-message');
-        const nextSelect = document.getElementById('plan-select');
+        // 💡「23ヶ月間総支払い額」に直接入力されている場合はその値を優先し、本体代（値引き後）は使わない
+        let diff = (kaedokiInputMode === 'total')
+          ? (Number(totalInput ? totalInput.value : 0) || 0)
+          : (phonePrice - phoneCredit);
 
         if (diff < 0) {
           if (errorMsg) errorMsg.innerText = "値がマイナスになります。入力し直してください";
@@ -1448,16 +1499,14 @@
         }
 
         globalSalePrice = diff;
-        if (textBadge) textBadge.innerText = "￥" + diff.toLocaleString();
+        // 自動計算モードの時だけ、算出結果を欄に反映する（直接入力中の値は上書きしない）
+        if (kaedokiInputMode !== 'total' && totalInput) totalInput.value = diff;
       } else {
         globalSalePrice = 0;
-        if (textBadge) textBadge.innerText = "￥0";
+        if (totalInput) totalInput.value = '';
+        kaedokiInputMode = 'price';
 
         // カエドキ以外が選ばれたときも、一応メッセージを消しておく
-        const errorMsg = document.getElementById('kaedoki-error-message');
-        // 👇【修正】else側でも nextSelect を使うので、ここでも取得するか、関数の最初で取得すると安全です
-        const nextSelect = document.getElementById('plan-select');
-
         if (errorMsg) errorMsg.innerText = "";
         if (nextSelect) nextSelect.disabled = false;
       }
@@ -1470,7 +1519,7 @@
       const phonePrice = document.getElementById('phonePrice');
       const selectTime = document.getElementById('select-time');
       const phoneCredit = document.getElementById('phoneCredit');
-      const textBadge = document.getElementById('salePriceText');
+      const totalInput = document.getElementById('salePriceText');
 
       const blockDivide = document.getElementById('block-divide');
       const blockKaedoki = document.getElementById('block-kaedoki');
@@ -1488,8 +1537,9 @@
       if (phonePrice) phonePrice.value = "";
       if (selectTime) selectTime.value = "";
       if (phoneCredit) phoneCredit.value = "";
+      if (totalInput) totalInput.value = "";
       globalSalePrice = 0;
-      if (textBadge) textBadge.innerText = "￥0";
+      kaedokiInputMode = 'price';
 
       if (blockDivide) { blockDivide.classList.add('disabled-box'); blockDivide.classList.remove('active-divide'); }
       if (blockKaedoki) { blockKaedoki.classList.add('disabled-box'); blockKaedoki.classList.remove('active-kaedoki'); }
@@ -1506,6 +1556,7 @@
         if (phonePrice) phonePrice.disabled = false;
         if (selectTime) selectTime.disabled = true;
         if (phoneCredit) phoneCredit.disabled = true;
+        if (totalInput) totalInput.disabled = true;
 
         // 💡 一括用のボックスだけ表示
         if (onceFeeBox) onceFeeBox.classList.remove('disabled-box');
@@ -1515,6 +1566,7 @@
         if (phonePrice) phonePrice.disabled = false;
         if (selectTime) selectTime.disabled = false;
         if (phoneCredit) phoneCredit.disabled = true;
+        if (totalInput) totalInput.disabled = true;
         if (blockDivide) { blockDivide.classList.remove('disabled-box'); blockDivide.classList.add('active-divide'); }
 
         // 💡 通常分割用のボックスを表示
@@ -1527,6 +1579,7 @@
         if (phonePrice) phonePrice.disabled = false;
         if (selectTime) selectTime.disabled = true;
         if (phoneCredit) phoneCredit.disabled = false;
+        if (totalInput) totalInput.disabled = false;
         if (blockKaedoki) { blockKaedoki.classList.remove('disabled-box'); blockKaedoki.classList.add('active-kaedoki'); }
 
         // 💡 カエドキプログラム用のボックスを表示
@@ -1540,6 +1593,7 @@
         if (phonePrice) phonePrice.disabled = true;
         if (selectTime) selectTime.disabled = true;
         if (phoneCredit) phoneCredit.disabled = true;
+        if (totalInput) totalInput.disabled = true;
       }
 
       updatePriceOptions();
@@ -2071,9 +2125,21 @@
           errors.push("購入方法");
           if (buyMode) buyMode.classList.add('input-error-highlight');
         } else {
-          if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
-            errors.push("本体代金");
-            if (phonePrice) phonePrice.classList.add('input-error-highlight');
+          // 💡 カエドキプログラムで「23ヶ月間総支払い額」を直接入力しているときは、
+          //    本体代（値引き後）の代わりにそちらを必須項目としてチェックする
+          const totalInput = document.getElementById('salePriceText');
+          const useTotalInput = (buyMode.value === 'kaedoki' && kaedokiInputMode === 'total');
+
+          if (!useTotalInput) {
+            if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
+              errors.push("本体代金");
+              if (phonePrice) phonePrice.classList.add('input-error-highlight');
+            }
+          } else {
+            if (!totalInput || !totalInput.value || Number(totalInput.value) <= 0) {
+              errors.push("23ヶ月間総支払い額");
+              if (totalInput) totalInput.classList.add('input-error-highlight');
+            }
           }
           if (buyMode.value === 'divide' && (!selectTime || !selectTime.value)) {
             errors.push("分割回数");
