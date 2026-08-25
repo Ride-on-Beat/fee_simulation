@@ -623,7 +623,11 @@
     bottom: 0 !important;
     left: 0 !important;
     width: 100% !important;
-    height: 60px !important;
+    /* 💡 height を固定値にすると、box-sizing:border-box の下で
+          padding-bottom（ホームインジケーター等のセーフエリア分）が
+          中身の高さを圧迫し、アイコンやラベルがはみ出す／重なる原因になっていた。
+          min-height にして、セーフエリア分は純粋に高さへ足されるようにする。 */
+    min-height: 60px !important;
     background-color: #7a99cf !important;
     border-top: 1px solid #e0e0e0 !important;
     display: flex !important;
