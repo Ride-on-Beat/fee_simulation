@@ -908,6 +908,11 @@
               <option value="mini">ドコモmini</option>
               <option value="ahamo">ahamo</option>
             </optgroup>
+            <optgroup label="年齢別プラン">
+              <option value="age-oyako">スマホデビュープランU15（5~15歳）</option>
+              <option value="age-u22">ドコモU22割（22歳以下）</option>
+              <option value="age-u29">ドコモU29割（23~29歳）</option>
+            </optgroup>
             <optgroup label="旧プラン（受付終了）" id="plan-old-group">
               <option value="old-eximo">eximo</option>
               <option value="old-eximopt">eximo ポイ活</option>
@@ -918,11 +923,6 @@
               <option value="old-gigahopremia">ギガホ プレミア</option>
               <option value="old-gigalite">ギガライト</option>
               <option value="old-gigaho">ギガホ</option>
-            </optgroup>
-            <optgroup label="年齢別プラン">
-              <option value="age-oyako">ドコモ親子割（5~15歳）</option>
-              <option value="age-u22">ドコモU22割（22歳以下）</option>
-              <option value="age-u29">ドコモU29割（23~29歳）</option>
             </optgroup>
           </select>
         </div>
@@ -1482,13 +1482,16 @@
       const nextSelect = document.getElementById('plan-select');
 
       if (buyMode === 'kaedoki') {
-        const phonePrice = Number(document.getElementById('phonePrice').value) || 0;
+        const phonePriceInput = document.getElementById('phonePrice');
         const phoneCredit = Number(document.getElementById('phoneCredit').value) || 0;
 
         // 💡「23ヶ月間総支払い額」に直接入力されている場合はその値を優先し、本体代（値引き後）は使わない
+        const hasTotal = !!(totalInput && totalInput.value !== '');
+        const hasPrice = !!(phonePriceInput && phonePriceInput.value !== '');
+
         let diff = (kaedokiInputMode === 'total')
-          ? (Number(totalInput ? totalInput.value : 0) || 0)
-          : (phonePrice - phoneCredit);
+          ? (hasTotal ? (Number(totalInput.value) || 0) : 0)
+          : (hasPrice ? ((Number(phonePriceInput.value) || 0) - phoneCredit) : 0);
 
         if (diff < 0) {
           if (errorMsg) errorMsg.innerText = "値がマイナスになります。入力し直してください";
@@ -1503,8 +1506,13 @@
         }
 
         globalSalePrice = diff;
-        // 自動計算モードの時だけ、算出結果を欄に反映する（直接入力中の値は上書きしない）
-        if (kaedokiInputMode !== 'total' && totalInput) totalInput.value = diff;
+        // 💡 入力されていない方の欄に、自動計算した金額を反映する
+        //    （まだ何も入力されていない場合は「0」を先回りして表示せず、空欄のままにしておく）
+        if (kaedokiInputMode === 'total') {
+          if (phonePriceInput) phonePriceInput.value = hasTotal ? (diff + phoneCredit) : '';
+        } else {
+          if (totalInput) totalInput.value = hasPrice ? diff : '';
+        }
       } else {
         globalSalePrice = 0;
         if (totalInput) totalInput.value = '';
@@ -1701,8 +1709,8 @@
     //    ドコモU22割／U29割はいずれも最小容量が28GB～と、期間終了後に切り替わる通常ドコモMAXの
     //    最上位帯（3GB～）を大きく上回るため、どの容量を選んでいても通常ドコモMAXの最上位帯料金になる
     const ageAfterPrice = {
-      'age-oyako-1': 1958, // ドコモ親子割 5GB：13ヶ月目以降
-      'age-oyako-2': 2728, // ドコモ親子割 20GBまで：13ヶ月目以降
+      'age-oyako-1': 1958, // スマホデビュープランU15 5GB：13ヶ月目以降
+      'age-oyako-2': 2728, // スマホデビュープランU15 20GBまで：13ヶ月目以降
       'age-u22-1': 8448, 'age-u22-2': 8448, 'age-u22-3': 8448,   // ドコモU22割：7ヶ月以降は通常ドコモMAX
       'age-u29-1': 8448, 'age-u29-2': 8448, 'age-u29-3': 8448    // ドコモU29割：3ヶ月以降は通常ドコモMAX
     };
@@ -2322,7 +2330,7 @@
       let communicationPureTotal = planSubtotal + optionSubtotal - discountSubtotal;
       if (communicationPureTotal < 0) communicationPureTotal = 0;
 
-      // 🎂 年齢別プラン（ドコモ親子割／U22割／U29割）を選択している場合、計算結果に
+      // 🎂 年齢別プラン（スマホデビュープランU15／U22割／U29割）を選択している場合、計算結果に
       //    「割引期間中」と「期間終了後（通常料金）」の月額を分けて一緒に表示する
       const agePlanSelect = document.getElementById('plan-select');
       const agePlanValue = agePlanSelect ? agePlanSelect.value : '';
