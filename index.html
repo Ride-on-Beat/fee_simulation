@@ -906,12 +906,14 @@
               <option value="MAXP">ドコモポイ活MAX</option>
               <option value="Pt20">ポイ活20</option>
               <option value="mini">ドコモmini</option>
+              <option value="mini2">ドコモmini2</option>
               <option value="ahamo">ahamo</option>
             </optgroup>
             <optgroup label="年齢別プラン">
               <option value="age-oyako">スマホデビュープランU15（5~15歳）</option>
               <option value="age-u22">ドコモU22割（22歳以下）</option>
               <option value="age-u29">ドコモU29割（23~29歳）</option>
+              <option value="age-max60">ドコモMAX 60歳以上割（60歳以上）</option>
             </optgroup>
             <optgroup label="旧プラン（受付終了）" id="plan-old-group">
               <option value="old-eximo">eximo</option>
@@ -925,6 +927,13 @@
               <option value="old-gigaho">ギガホ</option>
             </optgroup>
           </select>
+        </div>
+
+        <div class="section">
+          <div style="font-size:0.78rem; color:#555; background:#fff8e1; border:1px solid #ffca28; border-radius:6px; padding:8px 10px;">
+            ※「ahamo」は2026年12月1日提供開始の新料金（40GB／60GB／120GBの3段階制）を掲載しています。リニューアルに伴い「ahamo大盛り」オプションは2026年11月30日で提供終了のため選択できません。<br>
+            ※「ドコモMAX 60歳以上割」（2026年10月1日提供開始）は「年齢別プラン」から選択できます。
+          </div>
         </div>
 
         <div class="section">
@@ -1638,7 +1647,9 @@
       'MAXP': [{ value: 'MAXPst', text: '無制限' }],
       'Pt20': [{ value: 'Pt20st1', text: '~20GB' }, { value: 'Pt20st2', text: '無制限' }],
       'mini': [{ value: 'minist1', text: '4GB' }, { value: 'minist2', text: '10GB' }],
-      'ahamo': [{ value: 'ahamost', text: '30GB' }],
+      'mini2': [{ value: 'mini2st1', text: '~6GB' }, { value: 'mini2st2', text: '~12GB' }],
+      // 🔄 2026年12月1日のリニューアルにより30GB単一プランから3段階制（40GB/60GB/120GB）に変更
+      'ahamo': [{ value: 'ahamost1', text: '~40GB' }, { value: 'ahamost2', text: '40~60GB' }, { value: 'ahamost3', text: '60~120GB' }],
       // 📴 旧プラン（受付終了）：プラン検索タブの「受付終了プラン検索」（docomo）と同じ構成・金額
       'old-eximo': [{ value: 'old-eximo-1', text: '~1GB' }, { value: 'old-eximo-2', text: '1~3GB' }, { value: 'old-eximo-3', text: '3GB~' }],
       'old-eximopt': [{ value: 'old-eximopt-1', text: '無制限' }],
@@ -1652,11 +1663,13 @@
       // 🎂 年齢別プラン：年齢別プランタブの docomo と同じ構成・金額
       'age-oyako': [{ value: 'age-oyako-1', text: '5GB' }, { value: 'age-oyako-2', text: '20GB' }],
       'age-u22': [{ value: 'age-u22-1', text: '~28GB' }, { value: 'age-u22-2', text: '28~30GB' }, { value: 'age-u22-3', text: '30GB~' }],
-      'age-u29': [{ value: 'age-u29-1', text: '~28GB' }, { value: 'age-u29-2', text: '28~30GB' }, { value: 'age-u29-3', text: '30GB~' }]
+      'age-u29': [{ value: 'age-u29-1', text: '~28GB' }, { value: 'age-u29-2', text: '28~30GB' }, { value: 'age-u29-3', text: '30GB~' }],
+      // 🎂 ドコモMAX 60歳以上割（2026年10月1日提供開始）：容量帯はドコモMAXと同じ3段階
+      'age-max60': [{ value: 'age-max60-1', text: '~1GB' }, { value: 'age-max60-2', text: '1~3GB' }, { value: 'age-max60-3', text: '無制限' }]
     };
 
     const priceList = {
-      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'ahamost': 2970,
+      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'mini2st1': 3278, 'mini2st2': 4598, 'ahamost1': 3135, 'ahamost2': 4125, 'ahamost3': 5115,
       'old-eximo-1': 4565, 'old-eximo-2': 5665, 'old-eximo-3': 7315,
       'old-eximopt-1': 10615,
       'old-irumo-1': 550, 'old-irumo-2': 2167, 'old-irumo-3': 2827, 'old-irumo-4': 3377,
@@ -1668,7 +1681,10 @@
       'old-gigaho-1': 7865,
       'age-oyako-1': 1408, 'age-oyako-2': 1408,
       'age-u22-1': 2970, 'age-u22-2': 2970, 'age-u22-3': 7898,
-      'age-u29-1': 2970, 'age-u29-2': 2970, 'age-u29-3': 7898
+      'age-u29-1': 2970, 'age-u29-2': 2970, 'age-u29-3': 7898,
+      // 🎂 ドコモMAX 60歳以上割：ドコモMAXの基本料金から60歳以上割（最大3ヶ月間）を差し引いた額
+      //    （~1GB: 5698-1870、1~3GB: 6798-2970、無制限: 8448-550）
+      'age-max60-1': 3828, 'age-max60-2': 3828, 'age-max60-3': 7898
     };
 
     // 💰 プランごとの割引デフォルト（プラン検索／年齢別プランタブのマスターデータより）
@@ -1679,6 +1695,8 @@
       MAXP: { family: [550, 1210], user: [110, 220], card: [220, 550], net: 1210, ene: 110 },
       Pt20: { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: 110 },
       mini: { family: [], user: [], card: [220, 550], net: 1210, ene: 110 },
+      // ドコモmini2：dカードお支払割は「dカード PLATINUM／GOLD／GOLD U」のみ対象（通常dカードは対象外）
+      mini2: { family: [550], user: [], card: [0, 550], net: 1210, ene: 110 },
       ahamo: { family: [], user: [], card: [], net: null, ene: null },
 
       'old-eximo': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
@@ -1693,7 +1711,8 @@
 
       'age-oyako': { family: [], user: [], card: [220, 550], net: null, ene: null },
       'age-u22': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null },
-      'age-u29': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null }
+      'age-u29': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null },
+      'age-max60': { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: null }
     };
 
     // 🔧 特定の容量（tier）だけプランのデフォルト割引と異なる場合の上書き（プラン検索タブのデータに準拠）
@@ -1712,14 +1731,17 @@
       'age-oyako-1': 1958, // スマホデビュープランU15 5GB：13ヶ月目以降
       'age-oyako-2': 2728, // スマホデビュープランU15 20GBまで：13ヶ月目以降
       'age-u22-1': 8448, 'age-u22-2': 8448, 'age-u22-3': 8448,   // ドコモU22割：7ヶ月以降は通常ドコモMAX
-      'age-u29-1': 8448, 'age-u29-2': 8448, 'age-u29-3': 8448    // ドコモU29割：3ヶ月以降は通常ドコモMAX
+      'age-u29-1': 8448, 'age-u29-2': 8448, 'age-u29-3': 8448,   // ドコモU29割：3ヶ月以降は通常ドコモMAX
+      // ドコモMAX 60歳以上割：4ヶ月目以降は容量帯そのままの通常ドコモMAX料金に戻る
+      'age-max60-1': 5698, 'age-max60-2': 6798, 'age-max60-3': 8448
     };
 
     // 🎂 年齢別プラン：適用期間の長さ・期間終了後の注記
     const ageAfterInfo = {
       'age-oyako': { deadlineText: '加入から最大12ヶ月間', afterNote: '13ヶ月目以降は親子割（U15）対象外の通常料金になります。' },
       'age-u22': { deadlineText: '加入から7ヶ月間', afterNote: '7ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' },
-      'age-u29': { deadlineText: '加入から3ヶ月間', afterNote: '3ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' }
+      'age-u29': { deadlineText: '加入から3ヶ月間', afterNote: '3ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' },
+      'age-max60': { deadlineText: '加入から最大3ヶ月間', afterNote: '4ヶ月目以降は通常のドコモMAX料金に切り替わります。長期利用割・でんきセット割など期間中は選べなかった割引が選べるようになる場合があります。' }
     };
 
     // 現在選択されているプラン・容量から、有効な割引設定（デフォルト＋tier上書き）を返す
@@ -1960,7 +1982,7 @@
       if (adminFeeCheck) adminFeeCheck.disabled = false;
 
       // プラン（＋容量）ごとの割引額をラベルに反映し、対象外の割引は無効化する
-      // 💡 現行プラン（MAX/MAXP/Pt20/mini/ahamo）に加え、旧プラン・年齢別プランも
+      // 💡 現行プラン（MAX/MAXP/Pt20/mini/mini2/ahamo）に加え、旧プラン・年齢別プランも
       //    プラン検索／年齢別プランタブと同じ割引データ（planDiscountDefaults）で判定する
       const eff = getEffectiveDiscounts();
       applyDiscountAmounts(eff);
@@ -2049,7 +2071,7 @@
         if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
         if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
         if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
-      } else if (planSelect.value === 'mini') {
+      } else if (planSelect.value === 'mini' || planSelect.value === 'mini2') {
         if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
         if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
         if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
@@ -2057,6 +2079,8 @@
         if (op5mTel) { op5mTel.checked = false; op5mTel.disabled = true; }
         if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
         if (opMail) { opMail.checked = false; opMail.disabled = true; }
+        // 🔄 2026年11月30日で「ahamo大盛り」は提供終了のため選択不可にする
+        if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
       } else if (planSelect.value.indexOf('old-') === 0 || planSelect.value.indexOf('age-') === 0) {
         // 📴🎂 旧プラン・年齢別プランは ahamo 以外の docomo 通常プラン（MAX系）と同じオプション構成として扱う
         if (opMail) { opMail.checked = false; opMail.disabled = true; }
