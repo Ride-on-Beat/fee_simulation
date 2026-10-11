@@ -906,8 +906,9 @@
               <option value="MAXP">ドコモポイ活MAX</option>
               <option value="Pt20">ポイ活20</option>
               <option value="mini">ドコモmini</option>
-              <option value="mini2">ドコモmini2</option>
+              <option value="mini2">ドコモmini2（2026年12月1日から）</option>
               <option value="ahamo">ahamo</option>
+              <option value="ahamo2">ahamo（2026年12月1日から）</option>
             </optgroup>
             <optgroup label="年齢別プラン">
               <option value="age-oyako">スマホデビュープランU15（5~15歳）</option>
@@ -931,7 +932,7 @@
 
         <div class="section">
           <div style="font-size:0.78rem; color:#555; background:#fff8e1; border:1px solid #ffca28; border-radius:6px; padding:8px 10px;">
-            ※「ahamo」は2026年12月1日提供開始の新料金（40GB／60GB／120GBの3段階制）を掲載しています。リニューアルに伴い「ahamo大盛り」オプションは2026年11月30日で提供終了のため選択できません。<br>
+            ※「ahamo（料金改定後）」と「ドコモmini2」は2026年12月1日に開始します。<br>
             ※「ドコモMAX 60歳以上割」（2026年10月1日提供開始）は「年齢別プラン」から選択できます。
           </div>
         </div>
@@ -1650,8 +1651,9 @@
       'Pt20': [{ value: 'Pt20st1', text: '~20GB' }, { value: 'Pt20st2', text: '無制限' }],
       'mini': [{ value: 'minist1', text: '4GB' }, { value: 'minist2', text: '10GB' }],
       'mini2': [{ value: 'mini2st1', text: '~6GB' }, { value: 'mini2st2', text: '~12GB' }],
+      'ahamo': [{ value: 'ahamost', text: '30GB' }],
       // 🔄 2026年12月1日のリニューアルにより30GB単一プランから3段階制（40GB/60GB/120GB）に変更
-      'ahamo': [{ value: 'ahamost1', text: '~40GB' }, { value: 'ahamost2', text: '40~60GB' }, { value: 'ahamost3', text: '60~120GB' }],
+      'ahamo2': [{ value: 'ahamost1', text: '~40GB' }, { value: 'ahamost2', text: '40~60GB' }, { value: 'ahamost3', text: '60~120GB' }],
       // 📴 旧プラン（受付終了）：プラン検索タブの「受付終了プラン検索」（docomo）と同じ構成・金額
       'old-eximo': [{ value: 'old-eximo-1', text: '~1GB' }, { value: 'old-eximo-2', text: '1~3GB' }, { value: 'old-eximo-3', text: '3GB~' }],
       'old-eximopt': [{ value: 'old-eximopt-1', text: '無制限' }],
@@ -1671,7 +1673,7 @@
     };
 
     const priceList = {
-      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'mini2st1': 3278, 'mini2st2': 4598, 'ahamost1': 3135, 'ahamost2': 4125, 'ahamost3': 5115,
+      'MAXst1': 5698, 'MAXst2': 6798, 'MAXst3': 8448, 'MAXPst': 11748, 'Pt20st1': 7898, 'Pt20st2': 9570, 'minist1': 2750, 'minist2': 3850, 'mini2st1': 3278, 'mini2st2': 4598, 'ahamost': 2970, 'ahamost1': 3135, 'ahamost2': 4125, 'ahamost3': 5115,
       'old-eximo-1': 4565, 'old-eximo-2': 5665, 'old-eximo-3': 7315,
       'old-eximopt-1': 10615,
       'old-irumo-1': 550, 'old-irumo-2': 2167, 'old-irumo-3': 2827, 'old-irumo-4': 3377,
@@ -1700,6 +1702,7 @@
       // ドコモmini2：dカードお支払割は「dカード PLATINUM／GOLD／GOLD U」のみ対象（通常dカードは対象外）
       mini2: { family: [550], user: [], card: [0, 550], net: 1210, ene: 110 },
       ahamo: { family: [], user: [], card: [], net: null, ene: null },
+      ahamo2: { family: [], user: [], card: [], net: null, ene: null },
 
       'old-eximo': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
       'old-eximopt': { family: [550, 1100], user: [], card: [187], net: 1100, ene: null },
@@ -2083,12 +2086,12 @@
         if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
         if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
         if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
-      } else if (planSelect.value === 'ahamo') {
+      } else if (planSelect.value === 'ahamo' || planSelect.value === 'ahamo2') {
         if (op5mTel) { op5mTel.checked = false; op5mTel.disabled = true; }
         if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
         if (opMail) { opMail.checked = false; opMail.disabled = true; }
-        // 🔄 2026年11月30日で「ahamo大盛り」は提供終了のため選択不可にする
-        if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
+        // 🔄 2026年12月1日からの新ahamoでは「ahamo大盛り」は提供終了のため選択不可にする
+        if (planSelect.value === 'ahamo2' && opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
       } else if (planSelect.value.indexOf('old-') === 0 || planSelect.value.indexOf('age-') === 0) {
         // 📴🎂 旧プラン・年齢別プランは ahamo 以外の docomo 通常プラン（MAX系）と同じオプション構成として扱う
         if (opMail) { opMail.checked = false; opMail.disabled = true; }
