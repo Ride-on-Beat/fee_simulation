@@ -1804,42 +1804,36 @@
       '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 550, 'dval': 550, 'bst': 550, 'ks': 700, 'ah-tel': 1100, 'mini2-tel': 990, 'ah-mega': 1980, 'ah-pt': 2200
     };
 
-    const osToSeries = {
-      'iOS': [{ value: 'iPhone', text: 'iPhone' }],
-      'Android': [
-        { value: 'Galaxy', text: 'Galaxy' }, { value: 'Pixel', text: 'Pixel' }, { value: 'Xperia', text: 'Xperia' }, { value: 'AQUOS', text: 'AQUOS' }, { value: 'other', text: 'その他' }
-      ]
+    // 📱 smartあんしん補償の対象機器（works.html「smartあんしん補償月額検索」の deviceData と同一内容）
+    const deviceData = {
+      "iOS": {
+        "iPhone": { "18 Pro": 1720, "18 Pro Max": 1720, "17 Air": 1460, "17": 1100, "17e": 1100 }
+      },
+      "Android": {
+        "Galaxy": { "S26 Ultra": 1460, "S26+": 1100, "S26": 1100, "Z Flip8": 1100, "Z Fold8": 1720, "Z Fold8 Ultra": 1720, "Z Flip7": 1100, "Z Fold7": 1720, "A57": 990, "A25": 330 },
+        "Pixel": { "10 Pro": 1100, "10": 1100, "10a": 990 },
+        "Xperia": { "1 Ⅷ": 1720, "10 Ⅷ": 990, "1 Ⅶ": 1100 },
+        "AQUOS": { "R11": 1100, "R10": 880, "sense10": 860, "R9 pro": 880 },
+        "FCNT": { "arrows Alpha2": 990, "arrows Alpha": 990, "arrows We3": 490, "らくスマ": 605, "らくホン": 490 },
+        "motorola": { "razr 60d": 990 },
+        "京セラ": { "DIGNO": 330, "キッズケータイ": 330 }
+      }
     };
 
-    const seriesToDevices = {
-      'iPhone': [
-        { value: 'iPhone16', text: 'iPhone 16' }, { value: 'iPhone17e', text: 'iPhone 17e' }, { value: 'iPhone17', text: 'iPhone 17' }, { value: 'iPhoneAir', text: 'iPhone Air' }, { value: 'iPhone17Pro', text: 'iPhone 17 Pro' }, { value: 'iPhone17ProMax', text: 'iPhone 17 Pro MAX' }
-      ],
-      'Galaxy': [
-        { value: 'S26Ultra', text: 'S26 Ultra' }, { value: 'S26', text: 'S26' }, { value: 'S25', text: 'S25' }, { value: 'ZFlip7', text: 'Z Flip 7' }, { value: 'ZFold7', text: 'Z Fold 7' }, { value: 'A57', text: 'A57' }, { value: 'A36', text: 'A36' }, { value: 'A25', text: 'A25' }
-      ],
-      'Pixel': [
-        { value: '10Pro', text: '10 Pro' }, { value: '10', text: '10' }, { value: '10a', text: '10a' }, { value: '9a', text: '9a' }
-      ],
-      'Xperia': [
-        { value: '1-8', text: '1 Ⅷ' }, { value: '1-7', text: '1 Ⅶ' }, { value: '10-7', text: '10 Ⅶ' }
-      ],
-      'AQUOS': [
-        { value: 'R10', text: 'R10' }, { value: 'R9Pro', text: 'R9 pro' }, { value: 'sense10', text: 'sense 10' }, { value: 'sense9', text: 'sense 9' }, { value: 'wish5', text: 'wish 5' }
-      ],
-      'other': [
-        { value: 'arrowsAlpha', text: 'arrows Alpha' }, { value: 'arrowsWe2', text: 'arrows We2' }, { value: 'arrowsWe3', text: 'arrows We3' }, { value: 'raku-sp', text: 'らくらくスマートフォン' }, { value: 'raku-ph', text: 'らくらくフォン' }, { value: 'motorola', text: 'motorola razr 60d' }, { value: 'DIGNO', text: 'DIGNO' }, { value: 'kids-ph', text: 'キッズケータイ' }
-      ]
-    };
-
-    const compPrice = {
-      'iPhone16': 880, 'iPhone17e': 1100, 'iPhone17': 1100, 'iPhoneAir': 1460, 'iPhone17Pro': 1460, 'iPhone17ProMax': 1720,
-      'S26Ultra': 1460, 'S26': 1100, 'S25': 880, 'ZFlip7': 1100, 'ZFold7': 1720, 'A57': 990, 'A36': 330, 'A25': 330,
-      '10Pro': 1100, '10': 1100, '10a': 990, '9a': 880,
-      '1-8': 1720, '1-7': 1100, '10-7': 990,
-      'R10': 880, 'R9Pro': 880, 'sense10': 860, 'sense9': 605, 'wish5': 330,
-      'arrowsAlpha': 990, 'arrowsWe2': 330, 'arrowsWe3': 490, 'raku-sp': 605, 'raku-ph': 490, 'motorola': 990, 'DIGNO': 330, 'kids-ph': 330
-    };
+    // deviceData から、既存のプルダウン生成処理が使う形式（OS→シリーズ→機種、機種→月額）を作る
+    const osToSeries = {};
+    const seriesToDevices = {};
+    const compPrice = {};
+    Object.keys(deviceData).forEach(os => {
+      osToSeries[os] = Object.keys(deviceData[os]).map(series => ({ value: series, text: series }));
+      Object.keys(deviceData[os]).forEach(series => {
+        seriesToDevices[series] = Object.keys(deviceData[os][series]).map(model => {
+          const key = series + '|' + model;
+          compPrice[key] = deviceData[os][series][model];
+          return { value: key, text: model };
+        });
+      });
+    });
 
     const offPrice = {
       'under2': 550, 'over3': 1210, 'under10': 110, 'over20': 220, 'regular': 220, 'GOLD-U': 550, 'GOLD': 550, 'PLUTINUM': 550, 'net': 1210, 'ene': 110
