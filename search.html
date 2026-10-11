@@ -902,6 +902,12 @@ font-size:1.3rem;
             { giga: "110GB", price: 4950, type: "C", memo: "ahamo大盛り適用（+80GB ￥1,980）",
               desc: "30GBプランに「ahamo大盛り」オプション（+80GB ￥1,980）を適用した大容量プラン<br>5分間かけ放題付きでたくさん使いたい人におすすめ<br>契約と同時のみドコモメールの持ち運びオプション加入可能" },
           ] },
+        { name: "ドコモmini2（2026年12月1日から）", discounts: { family: [550], card: [220, 550], net: 1210, ele: 110, long: [] },
+          desc: "※2026年12月1日から提供開始<br>6GBと12GBの2段階の小容量プラン<br>みんなドコモ割（2回線以上で￥550）の対象に追加<br>データ量超過後は当月末まで最大128kbps",
+          strages: [{ giga: "~6GB", price: 3278, type: "A" }, { giga: "6~12GB", price: 4598, type: "A" }] },
+        { name: "ahamo（2026年12月1日から）", discounts: { family: [], card: [], net: null, ele: null, long: [] },
+          desc: "※2026年12月1日から新料金<br>大盛りオプションが廃止され、40GB・60GB・120GBの3段階制に<br>上限設定オプションで利用上限を40GB・60GBに設定可能<br>5分間かけ放題付き",
+          strages: [{ giga: "~40GB", price: 3135, type: "B" }, { giga: "40~60GB", price: 4125, type: "C" }, { giga: "60~120GB", price: 5115, type: "C" }] },
       ],
       au: [
         { name: "バリューリンクプラン", discounts: { family: [660, 1210], card: [220], net: 1100, ele: null, long: [] },
@@ -1150,7 +1156,7 @@ font-size:1.3rem;
 
     // 使用状況からの簡易検索
     // 無料通話オプション（10分程度までの通話）が用意されているプラン
-    const FREE_CALL_PLAN_NAMES = ["ahamo", "コミコミプランバリュー", "シンプル3 L"];
+    const FREE_CALL_PLAN_NAMES = ["ahamo", "ahamo（2026年12月1日から）", "コミコミプランバリュー", "シンプル3 L"];
 
     // 「あまり使わない」→type:A、「普段使い」→type:B、「よく使う」→type:Cのプランを表示する
     const USAGE_PRESET_TYPE = { '3': 'A', '35': 'B', '35plus': 'C' };
