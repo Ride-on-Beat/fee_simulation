@@ -1017,6 +1017,8 @@
                 onchange="optionRules(); updatePriceOptions();" disabled>あんしんモバイル保険（ケーズデンキ）￥700</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-tel" value="ahTel"
                 onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（ahamo）　￥1,100</label>
+            <label class="checkbox-label"><input type="checkbox" id="mini2-tel" value="mini2Tel"
+                onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（mini2）　￥990</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-mega" value="ahMega"
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
@@ -1664,8 +1666,8 @@
       'age-oyako': [{ value: 'age-oyako-1', text: '5GB' }, { value: 'age-oyako-2', text: '20GB' }],
       'age-u22': [{ value: 'age-u22-1', text: '~28GB' }, { value: 'age-u22-2', text: '28~30GB' }, { value: 'age-u22-3', text: '30GB~' }],
       'age-u29': [{ value: 'age-u29-1', text: '~28GB' }, { value: 'age-u29-2', text: '28~30GB' }, { value: 'age-u29-3', text: '30GB~' }],
-      // 🎂 ドコモMAX 60歳以上割（2026年10月1日提供開始）：容量帯はドコモMAXと同じ3段階
-      'age-max60': [{ value: 'age-max60-1', text: '~1GB' }, { value: 'age-max60-2', text: '1~3GB' }, { value: 'age-max60-3', text: '無制限' }]
+      // 🎂 ドコモMAX 60歳以上割（2026年10月1日提供開始）：容量帯はU22割／U29割と同じ3段階
+      'age-max60': [{ value: 'age-max60-1', text: '~28GB' }, { value: 'age-max60-2', text: '28~30GB' }, { value: 'age-max60-3', text: '30GB~' }]
     };
 
     const priceList = {
@@ -1683,7 +1685,7 @@
       'age-u22-1': 2970, 'age-u22-2': 2970, 'age-u22-3': 7898,
       'age-u29-1': 2970, 'age-u29-2': 2970, 'age-u29-3': 7898,
       // 🎂 ドコモMAX 60歳以上割：ドコモMAXの基本料金から60歳以上割（最大3ヶ月間）を差し引いた額
-      //    （~1GB: 5698-1870、1~3GB: 6798-2970、無制限: 8448-550）
+      //    （~28GB: 5698-1870、28~30GB: 6798-2970、30GB~: 8448-550）
       'age-max60-1': 3828, 'age-max60-2': 3828, 'age-max60-3': 7898
     };
 
@@ -1725,14 +1727,13 @@
     };
 
     // 🎂 年齢別プラン：割引適用期間が終了した後の「通常プラン料金」（年齢別プランタブのmemo記載の額に準拠）
-    //    ドコモU22割／U29割はいずれも最小容量が28GB～と、期間終了後に切り替わる通常ドコモMAXの
-    //    最上位帯（3GB～）を大きく上回るため、どの容量を選んでいても通常ドコモMAXの最上位帯料金になる
+    //    ドコモU22割／U29割／60歳以上割は期間終了後、ベースの通常ドコモMAX料金（3段階）に戻る
     const ageAfterPrice = {
       'age-oyako-1': 1958, // スマホデビュープランU15 5GB：13ヶ月目以降
       'age-oyako-2': 2728, // スマホデビュープランU15 20GBまで：13ヶ月目以降
-      'age-u22-1': 8448, 'age-u22-2': 8448, 'age-u22-3': 8448,   // ドコモU22割：7ヶ月以降は通常ドコモMAX
-      'age-u29-1': 8448, 'age-u29-2': 8448, 'age-u29-3': 8448,   // ドコモU29割：3ヶ月以降は通常ドコモMAX
-      // ドコモMAX 60歳以上割：4ヶ月目以降は容量帯そのままの通常ドコモMAX料金に戻る
+      'age-u22-1': 5698, 'age-u22-2': 6798, 'age-u22-3': 8448,   // ドコモU22割：7ヶ月以降は通常ドコモMAX
+      'age-u29-1': 5698, 'age-u29-2': 6798, 'age-u29-3': 8448,   // ドコモU29割：3ヶ月以降は通常ドコモMAX
+      // ドコモMAX 60歳以上割：4ヶ月目以降は通常ドコモMAX料金に戻る
       'age-max60-1': 5698, 'age-max60-2': 6798, 'age-max60-3': 8448
     };
 
@@ -1800,7 +1801,7 @@
     }
 
     const optionPrices = {
-      '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 550, 'dval': 550, 'bst': 550, 'ks': 700, 'ah-tel': 1100, 'ah-mega': 1980, 'ah-pt': 2200
+      '5mtel': 880, 'ed-tel': 1980, 'mail': 330, 'smart': 0, 'sec': 550, 'dval': 550, 'bst': 550, 'ks': 700, 'ah-tel': 1100, 'mini2-tel': 990, 'ah-mega': 1980, 'ah-pt': 2200
     };
 
     const osToSeries = {
@@ -2040,6 +2041,18 @@
         updatePriceOptions();
       });
     }
+    const telMini2 = document.getElementById('mini2-tel');
+    if (telMini2) {
+      telMini2.addEventListener('change', function () {
+        if (this.checked && tel5m) tel5m.checked = false;
+        updatePriceOptions();
+      });
+    }
+    if (tel5m) {
+      tel5m.addEventListener('change', function () {
+        if (this.checked && telMini2) telMini2.checked = false;
+      });
+    }
 
     function optionRules() {
       const planSelect = document.getElementById('plan-select');
@@ -2054,8 +2067,9 @@
       const opAhTel = document.getElementById('ah-tel');
       const opAhMega = document.getElementById('ah-mega');
       const opAhPt = document.getElementById('ah-pt');
+      const opMini2Tel = document.getElementById('mini2-tel');
 
-      const allOps = [op5mTel, opEdTel, opMail, opSmart, opSec, opKs, opDval, opBst, opAhTel, opAhMega, opAhPt];
+      const allOps = [op5mTel, opEdTel, opMail, opSmart, opSec, opKs, opDval, opBst, opAhTel, opAhMega, opAhPt, opMini2Tel];
 
       if (!planSelect || !planSelect.value) {
         allOps.forEach(op => { if (op) { op.checked = false; op.disabled = true; } });
@@ -2087,6 +2101,14 @@
         if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
         if (opAhMega) { opAhMega.checked = false; opAhMega.disabled = true; }
         if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
+      }
+
+      // 📞 かけ放題￥990はmini2専用。mini2では通常かけ放題・ahamoのかけ放題は選択できない
+      if (planSelect.value === 'mini2') {
+        if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
+        if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
+      } else {
+        if (opMini2Tel) { opMini2Tel.checked = false; opMini2Tel.disabled = true; }
       }
 
       toggleSmartAnshinOptions();
