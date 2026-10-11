@@ -707,6 +707,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
+                        denyDiscounts: ["d_family_mini2"],
                         comment: "Lemino, dアニメストア, DAZN, NBA・docomoのうちいずれか2つまで見放題（毎月切り替え可能）。<br>使用量に応じて料金が変動。",
                         strages: [
                             { giga: "~1GB", price: 5698 },
@@ -720,6 +721,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
+                        denyDiscounts: ["d_family_mini2"],
                         comment: "dポイント最大5,000ptで実質値引き。<br>ドコモMAX同様4種類のうち2つの動画配信サイトが見放題。",
                         strages: [{ giga: "無制限", price: 11748 }]
                     },
@@ -729,7 +731,7 @@
                         allowOption: true,
                         denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
                         allowDiscount: true,
-                        denyDiscounts: ["d_disc_old"],
+                        denyDiscounts: ["d_disc_old", "d_family_mini2"],
                         comment: "dポイント最大2,500ptで実質値引き。ポイ活を始めてみたい人<br>向け。<br>使用量20GBを境に料金が変動。",
                         strages: [
                             { giga: "~20GB", price: 7898 },
@@ -759,6 +761,32 @@
                         strages: [
                             { giga: "30GB", price: 2970 },
                             { giga: "110GB（大盛りオプション　￥1,980 追加後）", price: 4950 }
+                        ]
+                    },
+                    {
+                        id: "d_mini2",
+                        name: "ドコモmini2（2026年12月1日から）",
+                        allowOption: true,
+                        denyOptions: ["d_opt_5mAh", "d_opt_fullAh"],
+                        allowDiscount: true,
+                        denyDiscounts: ["d_disc_old", "d_family_2", "d_family_3"],
+                        comment: "※2026年12月1日から提供開始。<br>6GBと12GBの2段階の小容量プラン。<br>みんなドコモ割（2回線以上で￥550）の対象に追加。<br>データ量超過後は当月末まで最大128kbps。",
+                        strages: [
+                            { giga: "~6GB", price: 3278 },
+                            { giga: "6~12GB", price: 4598 }
+                        ]
+                    },
+                    {
+                        id: "d_ahamo2",
+                        name: "ahamo（2026年12月1日から）",
+                        allowOption: true,
+                        denyOptions: ["d_opt_5m", "d_opt_full"],
+                        allowDiscount: false,
+                        comment: "※2026年12月1日から新料金。<br>大盛りオプションが廃止され、40GB・60GB・120GBの3段階制に。<br>上限設定オプションで利用上限を40GB・60GBに設定可能。",
+                        strages: [
+                            { giga: "~40GB", price: 3135 },
+                            { giga: "40~60GB", price: 4125 },
+                            { giga: "60~120GB", price: 5115 }
                         ]
                     }
                 ],
@@ -963,7 +991,8 @@
                         value: 0,
                         family: [
                             { id: "d_family_2", name: "2人", value: 550 },
-                            { id: "d_family_3", name: "3人以上", value: 1210 }
+                            { id: "d_family_3", name: "3人以上", value: 1210 },
+                            { id: "d_family_mini2", name: "2人以上", value: 550 }
                         ]
                     },
                     {
