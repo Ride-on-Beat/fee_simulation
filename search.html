@@ -952,8 +952,6 @@ font-size:1.3rem;
       Rakuten: "#ffe9ef",
     };
 
-    // carrier(色相) × planIndex(明度) の組み合わせでプランごとに一意な配色を作る
-
     const LARGE_GB_SENTINEL = 999999; // 無制限 / open-high側の代表最大値
 
     // giga文字列 → { min, max } のGB範囲にパースする
@@ -980,8 +978,8 @@ font-size:1.3rem;
     function buildFlatEntries() {
       const entries = [];
       Object.keys(planData).forEach(carrier => {
-        planData[carrier].forEach((plan, planIndex) => {
-          const color = buildPlanColor(carrier, planIndex);
+        planData[carrier].forEach(plan => {
+          const color = buildPlanColor(carrier);
           plan.strages.forEach(tier => {
             const range = parseGiga(tier.giga);
             entries.push({
