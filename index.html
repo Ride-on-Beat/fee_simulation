@@ -1019,7 +1019,7 @@
             <label class="checkbox-label"><input type="checkbox" id="ah-tel" value="ahTel"
                 onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（ahamo）　￥1,100</label>
             <label class="checkbox-label"><input type="checkbox" id="mini2-tel" value="mini2Tel"
-                onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（mini2）　￥990</label>
+                onchange="optionRules(); updatePriceOptions();" disabled>かけ放題（mini2、60歳以上のみ）　￥990</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-mega" value="ahMega"
                 onchange="optionRules(); updatePriceOptions();" disabled>ahamo大盛り　￥1,980</label>
             <label class="checkbox-label"><input type="checkbox" id="ah-pt" value="ahPt"
@@ -1699,8 +1699,7 @@
       MAXP: { family: [550, 1210], user: [110, 220], card: [220, 550], net: 1210, ene: 110 },
       Pt20: { family: [550, 1210], user: [], card: [220, 550], net: 1210, ene: 110 },
       mini: { family: [], user: [], card: [220, 550], net: 1210, ene: 110 },
-      // ドコモmini2：dカードお支払割は「dカード PLATINUM／GOLD／GOLD U」のみ対象（通常dカードは対象外）
-      mini2: { family: [550], user: [], card: [0, 550], net: 1210, ene: 110 },
+      mini2: { family: [550], user: [], card: [220, 550], net: 1210, ene: 110 },
       ahamo: { family: [], user: [], card: [], net: null, ene: null },
       ahamo2: { family: [], user: [], card: [], net: null, ene: null },
 
@@ -2039,9 +2038,15 @@
       });
     }
     const telMini2 = document.getElementById('mini2-tel');
+    if (telEd) {
+      telEd.addEventListener('change', function () {
+        if (this.checked && telMini2) telMini2.checked = false;
+      });
+    }
     if (telMini2) {
       telMini2.addEventListener('change', function () {
         if (this.checked && tel5m) tel5m.checked = false;
+        if (this.checked && telEd) telEd.checked = false;
         updatePriceOptions();
       });
     }
@@ -2100,9 +2105,8 @@
         if (opAhPt) { opAhPt.checked = false; opAhPt.disabled = true; }
       }
 
-      // 📞 かけ放題￥990はmini2専用。mini2では通常かけ放題・ahamoのかけ放題は選択できない
+      // 📞 かけ放題￥990（60歳以上のみ）はmini2専用。mini2ではahamoのかけ放題は選択できない（通常のかけ放題￥1,980は選択可）
       if (planSelect.value === 'mini2') {
-        if (opEdTel) { opEdTel.checked = false; opEdTel.disabled = true; }
         if (opAhTel) { opAhTel.checked = false; opAhTel.disabled = true; }
       } else {
         if (opMini2Tel) { opMini2Tel.checked = false; opMini2Tel.disabled = true; }
