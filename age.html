@@ -378,14 +378,19 @@
     // 📞 通話特典（セクション2）：年齢一致時に該当プランカード一覧の下へ注記表示
     const callBenefits = [
       {
+        carrierLabel: "docomo", plan: "ドコモmini2",
+        ageMin: 60, ageMax: 999,
+        content: "24時間かけ放題月額￥1,980", price: 990, other: ""
+      },
+      {
         carrierLabel: "UQ mobile", plan: "トクトクプランⅡ",
         ageMin: 60, ageMax: 999,
-        content: "24時間通話放題1,980円が880円に", price: 880, other: ""
+        content: "24時間通話放題月額￥1,980", price: 880, other: ""
       },
       {
         carrierLabel: "softbank", plan: "スマホデビュープラン",
         ageMin: 60, ageMax: 999,
-        content: "24時間通話放題1,980円が880円に", price: 880, other: "ガラケーからの乗り換えまたは機種変更のみ対象"
+        content: "24時間通話放題月額￥1,980", price: 880, other: "ガラケーからの乗り換えまたは機種変更のみ対象"
       },
       {
         carrierLabel: "Rakuten", plan: "最強プラン",
@@ -847,7 +852,7 @@
         callList.innerHTML = matchedBenefits.map(b => `
           <div class="program-notice-box">
             <strong>${b.carrierLabel}／${b.plan}</strong><br>
-            ${b.content}　→　月額￥${b.price.toLocaleString()}
+            ${b.content}　→　￥${b.price.toLocaleString()}
             ${b.other ? `<br>${b.other}` : ''}
           </div>
         `).join('');
