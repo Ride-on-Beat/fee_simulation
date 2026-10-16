@@ -12,7 +12,6 @@
   <link rel="manifest" href="site.webmanifest">
   <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="manifest" href="site.webmanifest">
   <meta name="theme-color" content="#7d99cf">
 <title>Veil</title>
 <link rel="icon" href="data:,">
@@ -35,19 +34,6 @@
 
   * {
     box-sizing: border-box;
-  }
-
-  /* 📱 【スマホ画面風】枠付き・固定ヘッダーデザイン */
-  header,
-  header * {
-    background: transparent !important;
-    /* 中の余計な背景をすべて透明化 */
-  }
-
-  /* 🎨 ここでお好みのヘッダーの色を指定してください（現在は綺麗な真っ白） */
-  header {
-    background-color: #9e7d7e !important;
-    background: #1a4d2f !important;
   }
 
   html,
@@ -105,19 +91,6 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .alert-banner {
-    background-color: #ffebee;
-    color: #c62828;
-    border: 2px solid #ef5350;
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    font-weight: bold;
-    font-size: 0.9rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-    display: none;
   }
 
   .buy-option-block {
@@ -222,16 +195,6 @@
     text-align: right;
   }
 
-  .text-display-badge {
-    display: block;
-    width: 100%;
-    padding: 10px 0;
-    color: #0d47a1;
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: right;
-  }
-
   .checkbox-group {
     display: grid;
     grid-template-columns: 1fr;
@@ -293,11 +256,6 @@
     background-color: #eaeaea !important;
     border-left-color: #999 !important;
     pointer-events: none;
-  }
-
-  .result-locked {
-    opacity: 0.5 !important;
-    border: 2px dashed #ef5350 !important;
   }
 
   .subtotal-wrapper {
@@ -429,18 +387,6 @@
   .breakdown-line::before {
     content: "・";
     font-weight: bold;
-  }
-
-  .program-notice-box {
-    margin-top: 10px;
-    padding: 10px 12px;
-    background-color: #fff3cd;
-    border: 1px solid #ffeeba;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    color: #856404;
-    font-weight: bold;
-    line-height: 1.5;
   }
 
   .box-once {
@@ -669,8 +615,7 @@
     /* もし変数が悪さをしていれば元から断つ */
   }
 
-  h1,
-  header h1 {
+  h1 {
     color: #1e293b !important;
   }
 
@@ -773,32 +718,6 @@
     max-width: 55%;
     max-height: 55%;
     object-fit: contain;
-
-    /* アニメーション（animation: pulse...）の行は削除します */
-  }
-
-  .loader-text {
-    font-family: sans-serif;
-    color: #666;
-    font-size: 0.9rem;
-    letter-spacing: 0.1em;
-  }
-
-  @keyframes pulse {
-    0% {
-      transform: scale(0.9);
-      opacity: 0.4;
-    }
-
-    50% {
-      transform: scale(1.05);
-      opacity: 1;
-    }
-
-    100% {
-      transform: scale(0.9);
-      opacity: 0.4;
-    }
   }
 
   body.is-loading {
@@ -816,10 +735,6 @@
     <img src="Veil.png" alt="アプリのロゴ" class="loader-logo">
   </div>
 
-  <!-- 2. メインコンテンツ（あなたの作ったページ） -->
-  <div id="main-content">
-    <!-- ここに既存のコードが入る -->
-  </div>
   <div class="veil-app-header">
     <span class="veil-brand-text">Veil</span>
   </div>
@@ -859,7 +774,6 @@
           <label for="phonePrice">本体代（値引き後）:￥</label>
           <input type="number" id="phonePrice" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0"
             min="0" disabled oninput="restrictToDigits(this); calcSalePrice('price'); updatePriceOptions();">
-          <span style="font-size:0.9rem;"></span>
         </div>
 
         <div id="block-divide" class="buy-option-block disabled-box">
@@ -1130,8 +1044,6 @@
             <input type="checkbox" id="admin-fee" value="4950" onchange="updatePriceOptions();" disabled> 事務手数料　￥4,950
           </label>
         </div>
-
-        <div id="alert-error-banner" class="alert-banner"></div>
 
         <div id="final-result-card" class="card" style="background: #fff; border: none;">
           <h2 style="border-bottom-color: var(--primary-color); font-size: 1.3rem;">計算結果</h2>
@@ -2259,20 +2171,12 @@
         }
       }
 
-
-      // 不要になった上部バナーがあれば非表示にする
-      const banner = document.getElementById('alert-error-banner');
-      if (banner) banner.style.display = 'none';
-
       return errors;
     }
 
-    // (※smartあんしん補償や割引のチェックは長くなるため省略していますが、元のロジックのまま errors.push("〜") してあればOKです！)
-
     // ★【修正箇所】金額計算メインロジック。未入力項目があっても途中で処理を殺さず最後まで計算して合計を反映
     function updatePriceOptions() {
-      // 1. 要素の取得と基本チェック
-      if (typeof validateInputs === 'function') validateInputs();
+      // 1. 要素の取得
       const strageSelect = document.getElementById('strage-select');
       const selectedStrage = strageSelect ? strageSelect.value : '';
 
@@ -2463,7 +2367,6 @@
       // 日割り料金の最終合計（満額オプション分もここにしっかり入ります）
       let commsDayTotal = planDayPrice + totalOptionDayPrice - discountDayPrice;
       if (commsDayTotal < 0) commsDayTotal = 0;
-      const divPriceElm = document.getElementById('div-price'); if (divPriceElm) divPriceElm.innerText = '¥' + commsDayTotal.toLocaleString();
 
       let adminFee = 0;
       const adminFeeCheck = document.getElementById('admin-fee');
@@ -2625,16 +2528,10 @@
       let totalContinue = communicationPureTotal + phoneMonth3;
       if (totalContinue < 0) totalContinue = 0;
       let totalK24 = communicationPureTotal + phoneK24;
-      if (totalContinue < 0) totalContinue = 0;
       let totalK25 = communicationPureTotal + phoneK25;
-      if (totalContinue < 0) totalContinue = 0;
 
-      // 💡【追加】エラーがあるかチェック
-      const errorList = typeof validateInputs === 'function' ? validateInputs() : [];
-      const hasError = errorList.length > 0;
-
-      // 表示用メッセージ（例：「⚠️ 未入力があります：[プランの選択]」など短くスマートに）
-      const errorMsgText = `<span style="font-size:0.85rem; color:#d9534f; font-weight:normal;">⚠️ 未入力の項目があります！：<br>${errorList.join('、')}</span>`;
+      // 💡【追加】エラーがあるかチェック（未入力項目のハイライトもここで行う）
+      const hasError = validateInputs().length > 0;
 
       // 6. 画面（HTML）への最終出力の反映（エラー時は文字を上書き、金額を消す）
       // 日割り内訳の表示（ここはエラーに関係なく出しておいてOKです）
@@ -2643,15 +2540,12 @@
           '<span class="breakdown-line">プラン料金（日割り）：¥' + planDayPrice.toLocaleString() + '</span>' +
           '<span class="breakdown-line">オプション合計（日割り）：¥' + optionDayPrice.toLocaleString() + '</span>' +
           '<span class="breakdown-line">割引合計（日割り）：▲¥' + discountDayPrice.toLocaleString() + '</span>' +
-          '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>'; +
-            '</div>'
+          '<span class="breakdown-line">事務手数料：¥' + adminFee.toLocaleString() + '</span>' +
+          '</div>';
       }
 
-      // 💡 ここからがポイント！エラーがある場合とない場合で出力を完全に分ける
-      // エラーがある場合とない場合で出力を分ける
+      // 💡 エラーがある場合とない場合で出力を完全に分ける
       if (hasError) {
-        // 💡 昔の長いメッセージ（errorMsgText）は無視！
-        // 💡 コメントアウトされていた変数をここで活かします（関数内で使い回せるように設定）
         const pureErrorHtml = `<strong class="error-msg-red">⚠️未入力の項目があります！</strong>`;
 
         // 🎨 【大改造】要素（elm）と一緒に、適用したい色（colorCode）も受け取る関数にします
@@ -2729,8 +2623,8 @@
               '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>';
-            '</div>'
+              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>' +
+            '</div>';
           }
           if (priceContinue2Span) {
             priceContinue2Span.innerText = '¥' + totalMonth2.toLocaleString();
@@ -2744,8 +2638,8 @@
               '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>';
-            '</div>'
+              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>' +
+            '</div>';
           }
           if (priceContinue3Span) {
             priceContinue3Span.innerText = '¥' + totalContinue.toLocaleString();
@@ -2761,8 +2655,8 @@
               '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>';
-            '</div>'
+              '<span class="breakdown-line">本体代：¥' + phoneMonth2.toLocaleString() + '</span>' +
+            '</div>';
           }
           if (priceMonth2Span) {
             priceMonth2Span.innerText = '¥' + totalMonth2.toLocaleString();
@@ -2776,8 +2670,8 @@
               '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">オプション合計：¥' + optionSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>';
-            '</div>'
+              '<span class="breakdown-line">本体代月額：¥' + phoneMonth3.toLocaleString() + '</span>' +
+            '</div>';
           }
           if (priceMonth22Span) {
             priceMonth22Span.innerText = '¥' + totalContinue.toLocaleString();
@@ -2804,8 +2698,8 @@
               '<span class="breakdown-line">プラン月額：¥' + planSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">オプション月額：¥' + optionSubtotal.toLocaleString() + '</span>' +
               '<span class="breakdown-line">割引合計：▲¥' + discountSubtotal.toLocaleString() + '</span>' +
-              '<span class="breakdown-line">本体代月額　(25〜47回目)：¥' + phoneK25.toLocaleString() + '</span>';
-            '</div>'
+              '<span class="breakdown-line">本体代月額　(25〜47回目)：¥' + phoneK25.toLocaleString() + '</span>' +
+            '</div>';
           }
           if (priceK25Span) {
             priceK25Span.innerText = '¥' + totalK25.toLocaleString();
@@ -2824,13 +2718,8 @@
         if (el) el.innerText = '¥0';
       });
 
-      const divPriceElm = document.getElementById('div-price');
-      if (divPriceElm) divPriceElm.innerText = '¥0';
-
       if (document.getElementById('breakdown-once')) document.getElementById('breakdown-once').innerHTML = '<span class="breakdown-line">一括払いが選択されていません</span>';
       if (document.getElementById('breakdown-1')) document.getElementById('breakdown-1').innerHTML = '';
-      if (document.getElementById('breakdown-2')) document.getElementById('breakdown-2').innerHTML = '';
-      if (document.getElementById('breakdown-continue')) document.getElementById('breakdown-continue').innerHTML = '';
       if (document.getElementById('breakdown-k24')) document.getElementById('breakdown-k24').innerHTML = '';
       if (document.getElementById('breakdown-k25')) document.getElementById('breakdown-k25').innerHTML = '';
       if (document.getElementById('kaedoki-program-notice')) document.getElementById('kaedoki-program-notice').style.display = 'none';
@@ -2847,7 +2736,6 @@
       if (document.getElementById('continue-fee-box-3')) document.getElementById('continue-fee-box-3').classList.add('disabled-box');
       if (document.getElementById('kaedoki-month2-box')) document.getElementById('kaedoki-month2-box').classList.add('disabled-box');
       if (document.getElementById('kaedoki-extend-box')) document.getElementById('kaedoki-extend-box').classList.add('disabled-box');
-      if (document.getElementById('final-result-card')) document.getElementById('final-result-card').classList.remove('result-locked');
     }
 
     const tabs = document.querySelectorAll('.footer-tab');
