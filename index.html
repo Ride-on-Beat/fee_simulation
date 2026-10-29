@@ -773,7 +773,7 @@
         <div class="section">
           <label for="phonePrice">本体代（値引き後）:￥</label>
           <input type="number" id="phonePrice" class="amount-input" inputmode="numeric" pattern="[0-9]*" placeholder="0"
-            min="0" disabled oninput="restrictToDigits(this); calcSalePrice('price'); updatePriceOptions();">
+            min="0" disabled oninput="restrictToDigits(this); calcSalePrice(); updatePriceOptions();">
         </div>
 
         <div id="block-divide" class="buy-option-block disabled-box">
@@ -800,7 +800,7 @@
             <div>
               <label for="salePriceText" style="font-size:0.8rem; display:block; margin-bottom:4px;">23ヶ月間総支払い額:￥</label>
               <input type="number" id="salePriceText" class="amount-input" inputmode="numeric" pattern="[0-9]*"
-                placeholder="0" min="0" disabled oninput="restrictToDigits(this); calcSalePrice('total'); updatePriceOptions();">
+                placeholder="0" min="0" disabled oninput="restrictToDigits(this); calcSalePrice(); updatePriceOptions();">
               <div style="font-size:0.72rem; color:#555; margin-top:4px;">※直接入力すると、本体代（値引き後）の入力なしで残価との2つだけで計算できます</div>
               <div id="kaedoki-error-message"
                 style="color: #ff3333; font-weight: bold; font-size: 0.9rem; margin-top: 5px;"></div>
@@ -1286,10 +1286,12 @@
 
     let globalSalePrice = 0;
 
-    // 💡 いつでもカエドキプログラムの金額入力モード
-    //    'price' = 本体代（値引き後）と残価から23ヶ月間総支払い額を自動計算する
-    //    'total' = 23ヶ月間総支払い額を直接入力し、本体代（値引き後）は使わない
+    // 💡 いつでもカエドキプログラムの金額入力モード（calcSalePriceで入力状況から毎回決める）
+    //    'price' = 本体代（値引き後）－残価 を23ヶ月間の支払い対象額として使う
+    //    'total' = 23ヶ月間総支払い額が入力されているので、その値をそのまま使う
     let kaedokiInputMode = 'price';
+    // 💡 本体代（値引き後）が残価より小さく、支払い対象額がマイナスになっているか
+    let kaedokiAmountNegative = false;
 
     // 💡 テンキー（半角数字）以外の文字が入力・貼り付けされた場合は取り除く
     function restrictToDigits(el) {
@@ -1387,23 +1389,17 @@
     window.addEventListener('DOMContentLoaded', () => setCalcMode(currentCalcMode));
 
     // 本体代金や残価、23ヶ月間総支払い額の入力、購入方法の変更時に即座に計算を回す
-    // source: 'price' = 本体代（値引き後）を編集した → 本体代-残価から自動計算するモードに戻す
-    //         'total' = 23ヶ月間総支払い額を直接編集した → その値をそのまま採用するモードに切り替える
-    //         省略時  = 現在のモードを維持したまま再計算のみ行う（残価の編集や購入方法の変更時など）
-    function calcSalePrice(source) {
+    // 💡 各入力欄には利用者が入力した値だけを残し、もう一方の欄へ自動で書き込むことはしない
+    //    （書き込むと、片方を消していった時に自動入力された値が残り続けてしまうため）
+    function calcSalePrice() {
       const buyMode = document.getElementById('buy-mode').value;
       const totalInput = document.getElementById('salePriceText');
 
-      if (source === 'price') {
-        kaedokiInputMode = 'price';
-      } else if (source === 'total') {
-        // 空にした場合は自動計算モードへ戻す
-        kaedokiInputMode = (totalInput && totalInput.value !== '') ? 'total' : 'price';
-      }
+      // 「23ヶ月間総支払い額」が入力されていればその値を優先、空なら本体代（値引き後）－残価で計算する
+      kaedokiInputMode = (totalInput && totalInput.value !== '') ? 'total' : 'price';
 
-      // 👇 if文で使う前に、ここで先に要素を取得しておく
       const errorMsg = document.getElementById('kaedoki-error-message');
-      const nextSelect = document.getElementById('plan-select');
+      kaedokiAmountNegative = false;
 
       if (buyMode === 'kaedoki') {
         const phonePriceInput = document.getElementById('phonePrice');
@@ -1417,26 +1413,17 @@
           ? (hasTotal ? (Number(totalInput.value) || 0) : 0)
           : (hasPrice ? ((Number(phonePriceInput.value) || 0) - phoneCredit) : 0);
 
+        // 💡 マイナスになってもプランの選択は解除しない（本体代を1文字ずつ消している途中でも
+        //    一時的にマイナスになるため）。メッセージを出し、計算結果は未入力扱いにする
         if (diff < 0) {
           if (errorMsg) errorMsg.innerText = "値がマイナスになります。入力し直してください";
-          if (nextSelect) {
-            nextSelect.disabled = true;
-            nextSelect.value = "";
-          }
+          kaedokiAmountNegative = true;
           diff = 0;
         } else {
           if (errorMsg) errorMsg.innerText = "";
-          if (nextSelect) nextSelect.disabled = false;
         }
 
         globalSalePrice = diff;
-        // 💡 入力されていない方の欄に、自動計算した金額を反映する
-        //    （まだ何も入力されていない場合は「0」を先回りして表示せず、空欄のままにしておく）
-        if (kaedokiInputMode === 'total') {
-          if (phonePriceInput) phonePriceInput.value = hasTotal ? (diff + phoneCredit) : '';
-        } else {
-          if (totalInput) totalInput.value = hasPrice ? diff : '';
-        }
       } else {
         globalSalePrice = 0;
         if (totalInput) totalInput.value = '';
@@ -1444,7 +1431,6 @@
 
         // カエドキ以外が選ばれたときも、一応メッセージを消しておく
         if (errorMsg) errorMsg.innerText = "";
-        if (nextSelect) nextSelect.disabled = false;
       }
       // 金額が変わったら即座に最終合計を更新
       updatePriceOptions();
@@ -1476,6 +1462,9 @@
       if (totalInput) totalInput.value = "";
       globalSalePrice = 0;
       kaedokiInputMode = 'price';
+      kaedokiAmountNegative = false;
+      const kaedokiErrorMsg = document.getElementById('kaedoki-error-message');
+      if (kaedokiErrorMsg) kaedokiErrorMsg.innerText = "";
 
       if (blockDivide) { blockDivide.classList.add('disabled-box'); blockDivide.classList.remove('active-divide'); }
       if (blockKaedoki) { blockKaedoki.classList.add('disabled-box'); blockKaedoki.classList.remove('active-kaedoki'); }
@@ -2102,7 +2091,8 @@
           const useTotalInput = (buyMode.value === 'kaedoki' && kaedokiInputMode === 'total');
 
           if (!useTotalInput) {
-            if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0) {
+            if (!phonePrice || !phonePrice.value || Number(phonePrice.value) <= 0 ||
+                (buyMode.value === 'kaedoki' && kaedokiAmountNegative)) {
               errors.push("本体代金");
               if (phonePrice) phonePrice.classList.add('input-error-highlight');
             }
@@ -2846,12 +2836,17 @@
       if (pageAgeWrapper && pageAgeWrapper.style.display !== 'none') resizeIframeToContent(pageAge);
     });
 
+    // 💡 タブごとのスクロール位置。別タブへ移動して戻ってきた時に、移動前の位置から再開できるようにする
+    const tabScrollPositions = {};
+    let currentTabName = 'simulator';
+
     function switchTab(tabName) {
-      // 0. タブを切り替えるたびに、スクロール位置を維持せずページ最上部へ戻す
+      // 0. 切り替え前のタブのスクロール位置を記録しておく
       //    （body自体はoverflow:hiddenで固定されており、実際にスクロールしているのは
-      //    #app-scroll-area なので、window.scrollTo ではなくこちらを直接動かす）
+      //    #app-scroll-area なので、window ではなくこちらの位置を扱う）
       const appScrollArea = document.getElementById('app-scroll-area');
-      if (appScrollArea) appScrollArea.scrollTo({ top: 0, behavior: 'auto' });
+      if (appScrollArea) tabScrollPositions[currentTabName] = appScrollArea.scrollTop;
+      currentTabName = tabName;
 
       // 1. 【超重要】まずすべてのページを一旦完全に非表示（none）にする！
       if (pageSimulator) pageSimulator.style.display = 'none';
@@ -2901,6 +2896,14 @@
           pageWorksWrapper.style.display = 'block'; // 見出し＋ツール置き場（iframe）を表示
           requestAnimationFrame(() => resizeIframeToContent(pageWorks));
         }
+      }
+
+      // 4. 切り替え先のタブで前回記録した位置へ戻す（初めて開くタブは最上部）
+      //    iframeの高さ再計算（上のrequestAnimationFrame）が済んだ後に合わせ直す
+      if (appScrollArea) {
+        const restoreTop = tabScrollPositions[tabName] || 0;
+        appScrollArea.scrollTo({ top: restoreTop, behavior: 'auto' });
+        requestAnimationFrame(() => appScrollArea.scrollTo({ top: restoreTop, behavior: 'auto' }));
       }
     }
     function resetPlanInputs() {
